@@ -1,136 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Word Cards</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Cards</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f6fb;
+      margin: 0;
+      padding: 24px 16px 40px;
+      text-align: center;
+      color: #222;
+    }
 
-<style>
+    h2 {
+      margin: 0 0 18px;
+      font-size: 28px;
+    }
 
-body{
-font-family:sans-serif;
-background:#f4f6fb;
-text-align:center;
-padding:40px;
-}
+    .top-controls {
+      max-width: 420px;
+      margin: 0 auto 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-.card{
-background:white;
-padding:40px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-margin:30px auto;
-max-width:400px;
-}
+    select, button {
+      font-size: 16px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 12px;
+    }
 
-.word{
-font-size:40px;
-margin-bottom:20px;
-}
+    select {
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
 
-.translation{
-font-size:30px;
-color:#666;
-}
+    .card {
+      background: white;
+      padding: 36px 20px;
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+      margin: 20px auto;
+      max-width: 420px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+    }
 
-button{
-font-size:18px;
-padding:10px 20px;
-margin:10px;
-border:none;
-border-radius:10px;
-background:#3b82f6;
-color:white;
-}
+    .word {
+      font-size: 42px;
+      line-height: 1.2;
+      margin-bottom: 18px;
+      word-break: break-word;
+    }
 
-</style>
+    .translation {
+      font-size: 30px;
+      color: #666;
+      line-height: 1.3;
+      word-break: break-word;
+      min-height: 38px;
+    }
 
+    .buttons {
+      max-width: 420px;
+      margin: 0 auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(59,130,246,0.25);
+    }
+
+    button.secondary {
+      background: #64748b;
+      box-shadow: 0 4px 14px rgba(100,116,139,0.25);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .status {
+      margin-top: 14px;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
+  <h2>Word Cards</h2>
 
-<h2>Word Cards</h2>
+  <div class="top-controls">
+    <select id="modeSelect" onchange="changeMode()">
+      <option value="de-ru">DE → RU</option>
+      <option value="en-ru">EN → RU</option>
+      <option value="et-ru">ET → RU</option>
+      <option value="ru-de">RU → DE</option>
+    </select>
+  </div>
 
-<div class="card" onclick="flip()">
+  <div class="card" onclick="flip()">
+    <div id="word" class="word">loading...</div>
+    <div id="translation" class="translation">?</div>
+  </div>
 
-<div id="word" class="word">
-loading...
-</div>
+  <div class="buttons">
+    <button onclick="flip()">Show / Hide</button>
+    <button onclick="nextCard()">Next</button>
+    <button onclick="speakWord()">🔊 Speak</button>
+    <button class="secondary" onclick="shuffleWords()">🔀 Shuffle</button>
+  </div>
 
-<div id="translation" class="translation">
-?
-</div>
+  <div id="status" class="status"></div>
 
-</div>
+  <script>
+    const sheetID = "1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M";
+    const sheetName = "prilozenije";
 
-<button onclick="flip()">Show</button>
-<button onclick="nextCard()">Next</button>
+    let rowsData = [];
+    let words = [];
+    let i = 0;
+    let showAnswer = false;
+    let currentMode = "de-ru";
 
-<script>
+    // 0=id, 1=topic, 2=en, 3=de, 4=et, 5=ru
+    const modeMap = {
+      "de-ru": { front: 3, back: 5, lang: "de-DE" },
+      "en-ru": { front: 2, back: 5, lang: "en-US" },
+      "et-ru": { front: 4, back: 5, lang: "et-EE" },
+      "ru-de": { front: 5, back: 3, lang: "ru-RU" }
+    };
 
-const sheetID="1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M";
-const sheetName="prilozenije";
+    function updateStatus() {
+      const status = document.getElementById("status");
+      if (!words.length) {
+        status.innerText = "Нет слов для этого режима";
+        return;
+      }
+      status.innerText = `Карточка ${i + 1} из ${words.length}`;
+    }
 
-let words=[];
-let i=0;
-let showAnswer=false;
+    function showCard() {
+      const wordEl = document.getElementById("word");
+      const trEl = document.getElementById("translation");
 
-function showCard(){
+      if (words.length === 0) {
+        wordEl.innerText = "Нет слов";
+        trEl.innerText = "";
+        updateStatus();
+        return;
+      }
 
-if(words.length===0){
-document.getElementById("word").innerText="нет слов";
-return;
-}
+      wordEl.innerText = words[i].word;
+      trEl.innerText = showAnswer ? words[i].translation : "?";
+      updateStatus();
+    }
 
-document.getElementById("word").innerText=words[i].word;
+    function flip() {
+      if (!words.length) return;
+      showAnswer = !showAnswer;
+      showCard();
+    }
 
-document.getElementById("translation").innerText=
-showAnswer ? words[i].translation : "?";
+    function nextCard() {
+      if (!words.length) return;
+      i = (i + 1) % words.length;
+      showAnswer = false;
+      showCard();
+    }
 
-}
+    function shuffleWords() {
+      if (!words.length) return;
 
-function flip(){
+      for (let j = words.length - 1; j > 0; j--) {
+        const k = Math.floor(Math.random() * (j + 1));
+        [words[j], words[k]] = [words[k], words[j]];
+      }
 
-showAnswer=!showAnswer;
-showCard();
+      i = 0;
+      showAnswer = false;
+      showCard();
+    }
 
-}
+    function changeMode() {
+      currentMode = document.getElementById("modeSelect").value;
+      buildWordsForMode(currentMode);
+    }
 
-function nextCard(){
+    function buildWordsForMode(mode) {
+      const map = modeMap[mode];
 
-i=(i+1)%words.length;
-showAnswer=false;
-showCard();
+      words = rowsData
+        .map(r => ({
+          word: r[map.front] || "",
+          translation: r[map.back] || ""
+        }))
+        .filter(w => w.word && w.translation);
 
-}
+      i = 0;
+      showAnswer = false;
+      showCard();
+    }
 
-function loadWords(){
+    function speakWord() {
+      if (!words.length) return;
 
-const url=`https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+      const utterance = new SpeechSynthesisUtterance(words[i].word);
+      utterance.lang = modeMap[currentMode].lang;
+      utterance.rate = 0.9;
 
-fetch(url)
-.then(r=>r.text())
-.then(text=>{
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
 
-const json=JSON.parse(text.substring(47).slice(0,-2));
+    function loadWords() {
+      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
-const rows=json.table.rows;
+      fetch(url)
+        .then(r => r.text())
+        .then(text => {
+          const json = JSON.parse(text.substring(47).slice(0, -2));
+          const rows = json.table.rows || [];
 
-words=rows.map(r=>({
+          rowsData = rows.map(r => [
+            r.c[0]?.v || "", // id
+            r.c[1]?.v || "", // topic
+            r.c[2]?.v || "", // en
+            r.c[3]?.v || "", // de
+            r.c[4]?.v || "", // et
+            r.c[5]?.v || ""  // ru
+          ]);
 
-word:r.c[3]?.v||"",
-translation:r.c[5]?.v||""
+          buildWordsForMode(currentMode);
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById("word").innerText = "Ошибка загрузки";
+          document.getElementById("translation").innerText = "";
+          document.getElementById("status").innerText = "Проверь таблицу или доступ";
+        });
+    }
 
-}));
-
-showCard();
-
-});
-
-}
-
-loadWords();
-
-</script>
-
+    loadWords();
+  </script>
 </body>
 </html>
