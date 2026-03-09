@@ -12,6 +12,7 @@
       padding: 24px 16px 40px;
       text-align: center;
       color: #222;
+      -webkit-tap-highlight-color: transparent;
     }
 
     h2 {
@@ -52,6 +53,13 @@
       flex-direction: column;
       justify-content: center;
       cursor: pointer;
+      user-select: none;
+      touch-action: pan-y;
+      transition: transform 0.15s ease;
+    }
+
+    .card:active {
+      transform: scale(0.995);
     }
 
     .word {
@@ -90,6 +98,21 @@
       box-shadow: 0 4px 14px rgba(100,116,139,0.25);
     }
 
+    button.success {
+      background: #16a34a;
+      box-shadow: 0 4px 14px rgba(22,163,74,0.25);
+    }
+
+    button.danger {
+      background: #dc2626;
+      box-shadow: 0 4px 14px rgba(220,38,38,0.25);
+    }
+
+    button.warning {
+      background: #f59e0b;
+      box-shadow: 0 4px 14px rgba(245,158,11,0.25);
+    }
+
     button:active {
       transform: scale(0.98);
     }
@@ -98,6 +121,7 @@
       margin-top: 14px;
       color: #666;
       font-size: 14px;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -106,14 +130,16 @@
 
   <div class="top-controls">
     <select id="modeSelect" onchange="changeMode()">
-      <option value="de-ru">DE → RU</option>
+      <option value="ru-en">RU → EN</option>
+      <option value="ru-et">RU → ET</option>
+      <option value="ru-de">RU → DE</option>
       <option value="en-ru">EN → RU</option>
       <option value="et-ru">ET → RU</option>
-      <option value="ru-de">RU → DE</option>
+      <option value="de-ru">DE → RU</option>
     </select>
   </div>
 
-  <div class="card" onclick="flip()">
+  <div class="card" id="card" onclick="flip()">
     <div id="word" class="word">loading...</div>
     <div id="translation" class="translation">?</div>
   </div>
@@ -121,8 +147,11 @@
   <div class="buttons">
     <button onclick="flip()">Show / Hide</button>
     <button onclick="nextCard()">Next</button>
-    <button onclick="speakWord()">🔊 Speak</button>
+    <button class="success" onclick="markKnown()">✅ Know</button>
+    <button class="warning" onclick="undoLastKnown()">↩ Undo</button>
+    <button onclick="speakAnswer()">🔊 Answer</button>
     <button class="secondary" onclick="shuffleWords()">🔀 Shuffle</button>
+    <button class="danger" onclick="resetKnown()">♻ Reset known</button>
   </div>
 
   <div id="status" class="status"></div>
@@ -135,31 +164,55 @@
     let words = [];
     let i = 0;
     let showAnswer = false;
-    let currentMode = "de-ru";
+    let currentMode = "ru-en";
+
+    // для Undo храним последнюю убранную карточку
+    let lastRemoved = null;
 
     // 0=id, 1=topic, 2=en, 3=de, 4=et, 5=ru
     const modeMap = {
-      "de-ru": { front: 3, back: 5, lang: "de-DE" },
-      "en-ru": { front: 2, back: 5, lang: "en-US" },
-      "et-ru": { front: 4, back: 5, lang: "et-EE" },
-      "ru-de": { front: 5, back: 3, lang: "ru-RU" }
+      "ru-en": { front: 5, back: 2, speakLang: "en-US" },
+      "ru-et": { front: 5, back: 4, speakLang: "et-EE" },
+      "ru-de": { front: 5, back: 3, speakLang: "de-DE" },
+      "en-ru": { front: 2, back: 5, speakLang: "ru-RU" },
+      "et-ru": { front: 4, back: 5, speakLang: "ru-RU" },
+      "de-ru": { front: 3, back: 5, speakLang: "ru-RU" }
     };
+
+    function storageKey(mode) {
+      return `known_cards_${sheetID}_${sheetName}_${mode}`;
+    }
+
+    function getKnownIds(mode) {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey(mode)) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function setKnownIds(mode, ids) {
+      localStorage.setItem(storageKey(mode), JSON.stringify(ids));
+    }
 
     function updateStatus() {
       const status = document.getElementById("status");
+      const knownCount = getKnownIds(currentMode).length;
+
       if (!words.length) {
-        status.innerText = "Нет слов для этого режима";
+        status.innerText = `Колода закончилась 🎉 • Знаю: ${knownCount}`;
         return;
       }
-      status.innerText = `Карточка ${i + 1} из ${words.length}`;
+
+      status.innerText = `Карточка ${i + 1} из ${words.length} • Знаю: ${knownCount}`;
     }
 
     function showCard() {
       const wordEl = document.getElementById("word");
       const trEl = document.getElementById("translation");
 
-      if (words.length === 0) {
-        wordEl.innerText = "Нет слов";
+      if (!words.length) {
+        wordEl.innerText = "Колода закончилась 🎉";
         trEl.innerText = "";
         updateStatus();
         return;
@@ -198,29 +251,86 @@
 
     function changeMode() {
       currentMode = document.getElementById("modeSelect").value;
+      lastRemoved = null;
       buildWordsForMode(currentMode);
     }
 
     function buildWordsForMode(mode) {
       const map = modeMap[mode];
+      const knownIds = getKnownIds(mode);
 
       words = rowsData
         .map(r => ({
+          id: r[0] || "",
           word: r[map.front] || "",
           translation: r[map.back] || ""
         }))
-        .filter(w => w.word && w.translation);
+        .filter(w => w.id && w.word && w.translation && !knownIds.includes(w.id));
 
       i = 0;
       showAnswer = false;
       showCard();
     }
 
-    function speakWord() {
+    function markKnown() {
       if (!words.length) return;
 
-      const utterance = new SpeechSynthesisUtterance(words[i].word);
-      utterance.lang = modeMap[currentMode].lang;
+      const currentCard = words[i];
+      const removeIndex = i;
+      const knownIds = getKnownIds(currentMode);
+
+      if (!knownIds.includes(currentCard.id)) {
+        knownIds.push(currentCard.id);
+        setKnownIds(currentMode, knownIds);
+      }
+
+      lastRemoved = {
+        mode: currentMode,
+        card: currentCard,
+        index: removeIndex
+      };
+
+      words.splice(removeIndex, 1);
+
+      if (i >= words.length) {
+        i = 0;
+      }
+
+      showAnswer = false;
+      showCard();
+    }
+
+    function undoLastKnown() {
+      if (!lastRemoved) return;
+      if (lastRemoved.mode !== currentMode) return;
+
+      const knownIds = getKnownIds(currentMode).filter(id => id !== lastRemoved.card.id);
+      setKnownIds(currentMode, knownIds);
+
+      const insertIndex = Math.min(lastRemoved.index, words.length);
+      words.splice(insertIndex, 0, lastRemoved.card);
+
+      i = insertIndex;
+      showAnswer = false;
+      showCard();
+
+      lastRemoved = null;
+    }
+
+    function resetKnown() {
+      localStorage.removeItem(storageKey(currentMode));
+      lastRemoved = null;
+      buildWordsForMode(currentMode);
+    }
+
+    function speakAnswer() {
+      if (!words.length) return;
+
+      const answerText = words[i].translation;
+      if (!answerText) return;
+
+      const utterance = new SpeechSynthesisUtterance(answerText);
+      utterance.lang = modeMap[currentMode].speakLang;
       utterance.rate = 0.9;
 
       window.speechSynthesis.cancel();
@@ -254,6 +364,39 @@
           document.getElementById("status").innerText = "Проверь таблицу или доступ";
         });
     }
+
+    // Swipe:
+    // вправо = next
+    // влево = know
+    const card = document.getElementById("card");
+    let startX = 0;
+    let startY = 0;
+    let isSwiping = false;
+
+    card.addEventListener("touchstart", function(e) {
+      const touch = e.changedTouches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      isSwiping = true;
+    }, { passive: true });
+
+    card.addEventListener("touchend", function(e) {
+      if (!isSwiping) return;
+
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+
+      isSwiping = false;
+
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) {
+          nextCard();   // свайп вправо
+        } else {
+          markKnown();  // свайп влево
+        }
+      }
+    }, { passive: true });
 
     loadWords();
   </script>
