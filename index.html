@@ -6,62 +6,60 @@
 <title>Word Cards</title>
 
 <style>
-
 body{
-font-family:sans-serif;
-background:#f4f6fb;
-margin:0;
-padding:20px;
-text-align:center;
+  font-family:sans-serif;
+  background:#f4f6fb;
+  margin:0;
+  padding:20px;
+  text-align:center;
 }
 
 h2{
-margin-bottom:20px;
+  margin-bottom:20px;
+  font-size:28px;
 }
 
 .card{
-
-padding:40px 20px;
-border-radius:20px;
-margin:20px auto;
-max-width:420px;
-min-height:180px;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
-
-transition:0.2s;
-
+  padding:40px 20px;
+  border-radius:20px;
+  margin:20px auto;
+  max-width:420px;
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+  transition:0.2s;
+  user-select:none;
+  -webkit-user-select:none;
 }
 
 .word{
-font-size:40px;
-margin-bottom:15px;
+  font-size:40px;
+  margin-bottom:15px;
+  line-height:1.2;
+  word-break:break-word;
 }
 
 .translation{
-font-size:28px;
-color:#444;
+  font-size:28px;
+  color:#444;
+  line-height:1.3;
+  word-break:break-word;
 }
 
 button{
-
-padding:10px 16px;
-margin:5px;
-border:none;
-border-radius:10px;
-font-size:16px;
-cursor:pointer;
-
+  padding:10px 16px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
 }
 
 .mode{
-margin-bottom:10px;
+  margin-bottom:10px;
 }
-
 </style>
 </head>
 
@@ -70,258 +68,280 @@ margin-bottom:10px;
 <h2>Word Cards</h2>
 
 <div class="mode">
-
-<select id="modeSelect" onchange="changeMode()">
-
-<option value="ru-en">RU → EN</option>
-<option value="ru-et">RU → ET</option>
-<option value="ru-de">RU → DE</option>
-
-<option value="en-ru">EN → RU</option>
-<option value="et-ru">ET → RU</option>
-<option value="de-ru">DE → RU</option>
-
-</select>
-
+  <select id="modeSelect" onchange="changeMode()">
+    <option value="ru-en">RU → EN</option>
+    <option value="ru-et">RU → ET</option>
+    <option value="ru-de">RU → DE</option>
+    <option value="en-ru">EN → RU</option>
+    <option value="et-ru">ET → RU</option>
+    <option value="de-ru">DE → RU</option>
+  </select>
 </div>
 
 <div id="card" class="card">
-
-<div id="word" class="word">loading...</div>
-<div id="translation" class="translation">?</div>
-
+  <div id="word" class="word">loading...</div>
+  <div id="translation" class="translation">?</div>
 </div>
 
 <div>
-
-<button onclick="flip()">Show</button>
-<button onclick="shuffleWords()">Shuffle</button>
-<button onclick="resetKnown()">Reset</button>
-<button onclick="speakAnswer()">🔊</button>
-<button onclick="archiveMode()">📖 Вспомнить</button>
-
+  <button onclick="flip()">Show</button>
+  <button onclick="shuffleWords()">Shuffle</button>
+  <button onclick="resetKnown()">Reset</button>
+  <button onclick="speakAnswer()">🔊</button>
+  <button onclick="archiveMode()">📖 Вспомнить</button>
 </div>
 
 <script>
+const sheetID = "1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M";
+const sheetName = "prilozenije";
 
-const sheetID="1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M"
-const sheetName="prilozenije"
+let rows = [];
+let words = [];
+let i = 0;
+let show = false;
+let archive = false;
+let stats = {};
 
-let rows=[]
-let words=[]
-let i=0
+const modeMap = {
+  "ru-en": { front: 5, back: 2, color: "#ffe8ef", speakLang: "en-US" },
+  "ru-et": { front: 5, back: 4, color: "#e8f4ff", speakLang: "et-EE" },
+  "ru-de": { front: 5, back: 3, color: "#eaf8ea", speakLang: "de-DE" },
+  "en-ru": { front: 2, back: 5, color: "#ffe8ef", speakLang: "ru-RU" },
+  "et-ru": { front: 4, back: 5, color: "#e8f4ff", speakLang: "ru-RU" },
+  "de-ru": { front: 3, back: 5, color: "#eaf8ea", speakLang: "ru-RU" }
+};
 
-let show=false
-let archive=false
-
-let stats={}
-
-const modeMap={
-
-"ru-en":{front:5,back:2,color:"#ffe4ec"},
-"ru-et":{front:5,back:4,color:"#e6f3ff"},
-"ru-de":{front:5,back:3,color:"#e8f7e8"},
-
-"en-ru":{front:2,back:5,color:"#ffe4ec"},
-"et-ru":{front:4,back:5,color:"#e6f3ff"},
-"de-ru":{front:3,back:5,color:"#e8f7e8"}
-
-}
-
-let currentMode="ru-en"
+let currentMode = "ru-en";
 
 function today(){
-
-let d=new Date()
-
-return new Date(d.getFullYear(),d.getMonth(),d.getDate())
-
+  const d = new Date();
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 
-function parseDate(str){
+function parseDate(value){
+  if(!value) return null;
 
-let p=str.split(".")
-return new Date(2000+parseInt(p[2]),p[1]-1,p[0])
+  // если уже Date
+  if (value instanceof Date) {
+    return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+  }
 
+  // если текст 08.03.26
+  if (typeof value === "string" && value.includes(".")) {
+    const p = value.split(".");
+    if (p.length === 3) {
+      const day = parseInt(p[0], 10);
+      const month = parseInt(p[1], 10) - 1;
+      const year = 2000 + parseInt(p[2], 10);
+      return new Date(year, month, day);
+    }
+  }
+
+  // если дата пришла как стандартная дата
+  const d = new Date(value);
+  if (!isNaN(d)) {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  return null;
+}
+
+function getAgeInDays(dateValue){
+  const d = parseDate(dateValue);
+  if(!d) return 9999;
+  return Math.floor((today() - d) / 86400000);
 }
 
 function loadWords(){
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
-const url=`https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName}`
+  fetch(url)
+    .then(r => r.text())
+    .then(text => {
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      const rowsRaw = json.table.rows || [];
 
-fetch(url)
-.then(r=>r.text())
-.then(text=>{
+      rows = rowsRaw.map(r => [
+        r.c[0]?.v || "",               // id
+        r.c[1]?.v || "",               // topic
+        r.c[2]?.v || "",               // en
+        r.c[3]?.v || "",               // de
+        r.c[4]?.v || "",               // et
+        r.c[5]?.v || "",               // ru
+        r.c[6]?.f || r.c[6]?.v || ""   // date (сначала formatted, потом raw)
+      ]);
 
-const json=JSON.parse(text.substring(47).slice(0,-2))
-const rowsRaw=json.table.rows
+      buildDeck();
+    })
+    .catch(() => {
+      document.getElementById("word").innerText = "Ошибка загрузки";
+      document.getElementById("translation").innerText = "";
+      applyCardColor();
+    });
+}
 
-rows=rowsRaw.map(r=>[
-
-r.c[0]?.v||"",
-r.c[1]?.v||"",
-r.c[2]?.v||"",
-r.c[3]?.v||"",
-r.c[4]?.v||"",
-r.c[5]?.v||"",
-r.c[6]?.v||""
-
-])
-
-buildDeck()
-
-})
-
+function applyCardColor(){
+  document.getElementById("card").style.background = modeMap[currentMode].color;
 }
 
 function buildDeck(){
+  const map = modeMap[currentMode];
+  words = [];
 
-let map=modeMap[currentMode]
+  const activeWords = [];
+  const archiveWords = [];
 
-words=[]
+  rows.forEach(r => {
+    const w = {
+      id: r[0],
+      word: r[map.front],
+      translation: r[map.back],
+      date: r[6]
+    };
 
-rows.forEach(r=>{
+    if (!w.word || !w.translation) return;
 
-let w={
-id:r[0],
-word:r[map.front],
-translation:r[map.back],
-date:r[6]
-}
+    const age = getAgeInDays(w.date);
 
-if(!w.word||!w.translation)return
+    if (age <= 7) {
+      activeWords.push(w);
+    } else {
+      archiveWords.push(w);
+    }
+  });
 
-let age=(today()-parseDate(w.date))/86400000
+  if (!archive) {
+    words = [...activeWords];
 
-if(!archive){
+    // подмешивание архива: каждая 6-я карточка
+    if (archiveWords.length > 0) {
+      const shuffledArchive = [...archiveWords].sort(() => Math.random() - 0.5);
+      const mixed = [];
+      let archiveIndex = 0;
 
-if(age<=7)words.push(w)
+      for (let n = 0; n < words.length; n++) {
+        mixed.push(words[n]);
+        if ((n + 1) % 5 === 0 && archiveIndex < shuffledArchive.length) {
+          mixed.push(shuffledArchive[archiveIndex]);
+          archiveIndex++;
+        }
+      }
 
-}else{
+      words = mixed;
+    }
+  } else {
+    words = [...archiveWords].sort(() => Math.random() - 0.5).slice(0, 15);
+  }
 
-if(age>7)words.push(w)
-
-}
-
-})
-
-shuffleWords()
-
+  shuffleWords();
 }
 
 function shuffleWords(){
-
-words.sort(()=>Math.random()-0.5)
-i=0
-show=false
-render()
-
+  words.sort(() => Math.random() - 0.5);
+  i = 0;
+  show = false;
+  render();
 }
 
 function render(){
+  applyCardColor();
 
-if(!words.length){
+  if (!words.length) {
+    document.getElementById("word").innerText = "нет слов";
+    document.getElementById("translation").innerText = "";
+    return;
+  }
 
-document.getElementById("word").innerText="нет слов"
-document.getElementById("translation").innerText=""
-return
-
-}
-
-let w=words[i]
-
-document.getElementById("word").innerText=w.word
-document.getElementById("translation").innerText=show?w.translation:"?"
-
-document.getElementById("card").style.background=modeMap[currentMode].color
-
+  const w = words[i];
+  document.getElementById("word").innerText = w.word;
+  document.getElementById("translation").innerText = show ? w.translation : "?";
 }
 
 function flip(){
-
-show=!show
-render()
-
+  show = !show;
+  render();
 }
 
 function next(){
+  if (!words.length) return;
+  i = (i + 1) % words.length;
+  show = false;
+  render();
+}
 
-i=(i+1)%words.length
-show=false
-render()
+function remember(){
+  // влево = знает
+  if (!words.length) return;
+  const id = words[i].id;
 
+  if (!stats[id]) stats[id] = { l: 0, r: 0 };
+  stats[id].l++;
+
+  next();
+}
+
+function notRemember(){
+  // вправо = не помнит
+  if (!words.length) return;
+  const id = words[i].id;
+
+  if (!stats[id]) stats[id] = { l: 0, r: 0 };
+  stats[id].r++;
+
+  next();
 }
 
 function changeMode(){
-
-currentMode=document.getElementById("modeSelect").value
-archive=false
-buildDeck()
-
+  currentMode = document.getElementById("modeSelect").value;
+  archive = false;
+  buildDeck();
 }
 
 function archiveMode(){
-
-archive=true
-
-words=words.sort(()=>Math.random()-0.5).slice(0,15)
-
-i=0
-render()
-
+  archive = true;
+  buildDeck();
 }
 
 function speakAnswer(){
+  if (!words.length) return;
 
-if(!words.length)return
-
-let text=words[i].translation
-
-let u=new SpeechSynthesisUtterance(text)
-
-speechSynthesis.speak(u)
-
+  const text = words[i].translation;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = modeMap[currentMode].speakLang;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
 }
 
 function resetKnown(){
-
-stats={}
+  stats = {};
+  archive = false;
+  buildDeck();
 }
 
-let startX=0
+// свайпы:
+// влево = знает
+// вправо = не помнит
+let startX = 0;
 
-document.getElementById("card").addEventListener("touchstart",e=>{
+const card = document.getElementById("card");
 
-startX=e.changedTouches[0].clientX
+card.addEventListener("touchstart", e => {
+  startX = e.changedTouches[0].clientX;
+}, { passive: true });
 
-})
+card.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - startX;
 
-document.getElementById("card").addEventListener("touchend",e=>{
+  if (Math.abs(dx) < 50) return;
 
-let dx=e.changedTouches[0].clientX-startX
+  if (dx < 0) {
+    remember();     // свайп влево
+  } else {
+    notRemember();  // свайп вправо
+  }
+}, { passive: true });
 
-if(Math.abs(dx)<50)return
-
-let id=words[i].id
-
-if(!stats[id])stats[id]={l:0,r:0}
-
-if(dx<0){
-
-stats[id].l++
-
-}else{
-
-stats[id].r++
-
-}
-
-next()
-
-})
-
-loadWords()
-
+loadWords();
 </script>
 
 </body>
