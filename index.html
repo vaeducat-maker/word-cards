@@ -121,6 +121,35 @@
       color: #64748b;
       min-height: 18px;
     }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 14px;
+      border-radius: 3px;
+      opacity: 0.9;
+      animation: confetti-fall 1.8s linear forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(540deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -153,6 +182,7 @@
     <button class="btn-review" onclick="reviewMode()">📖 Review</button>
   </div>
 
+  <div id="confettiLayer" class="confetti-layer"></div>
   <div id="status" class="status"></div>
 
   <script>
@@ -165,6 +195,7 @@
     let show = false;
     let review = false;
     let animating = false;
+    let celebrationPlayed = false;
 
     const modeMap = {
       "ru-en": { front: 5, back: 2, color: "#ffe8ef", speakLang: "en-US" },
@@ -225,6 +256,36 @@
       document.getElementById("status").innerText = text;
     }
 
+    function launchConfetti() {
+      if (celebrationPlayed) return;
+      celebrationPlayed = true;
+
+      const layer = document.getElementById("confettiLayer");
+      layer.innerHTML = "";
+
+      const colors = ["#5aa9ff", "#8b7cff", "#ff9b42", "#4cc98b", "#ff6fa8", "#ffd84d"];
+
+      for (let n = 0; n < 28; n++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti-piece";
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = `${Math.random() * 0.4}s`;
+        piece.style.transform = `rotate(${Math.random() * 180}deg)`;
+        layer.appendChild(piece);
+      }
+
+      setTimeout(() => {
+        layer.innerHTML = "";
+      }, 2200);
+    }
+
+    function resetCelebration() {
+      celebrationPlayed = false;
+      const layer = document.getElementById("confettiLayer");
+      if (layer) layer.innerHTML = "";
+    }
+
     function loadWords() {
       const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
@@ -268,6 +329,8 @@
     }
 
     function buildDeck() {
+      resetCelebration();
+
       const allCards = getAllCardsForMode();
       const activeWords = [];
       const archiveWords = [];
@@ -321,6 +384,7 @@
         document.getElementById("word").innerText = "🎉 Great job!";
         document.getElementById("translation").innerText = "";
         updateStatus("");
+        launchConfetti();
         return;
       }
 
@@ -396,8 +460,11 @@
 
     function speakAnswer() {
       if (!words.length) return;
+      if (!show) return;
 
       const text = words[i].translation;
+      if (!text) return;
+
       const u = new SpeechSynthesisUtterance(text);
       u.lang = modeMap[currentMode].speakLang;
       speechSynthesis.cancel();
