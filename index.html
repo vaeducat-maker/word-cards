@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Cards</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+background:#f4f6fb;
+margin:0;
+padding:20px;
+text-align:center;
+}
+
+h2{
+margin-bottom:20px;
+}
+
+.card{
+
+padding:40px 20px;
+border-radius:20px;
+margin:20px auto;
+max-width:420px;
+min-height:180px;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+
+transition:0.2s;
+
+}
+
+.word{
+font-size:40px;
+margin-bottom:15px;
+}
+
+.translation{
+font-size:28px;
+color:#444;
+}
+
+button{
+
+padding:10px 16px;
+margin:5px;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+
+}
+
+.mode{
+margin-bottom:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>Word Cards</h2>
+
+<div class="mode">
+
+<select id="modeSelect" onchange="changeMode()">
+
+<option value="ru-en">RU → EN</option>
+<option value="ru-et">RU → ET</option>
+<option value="ru-de">RU → DE</option>
+
+<option value="en-ru">EN → RU</option>
+<option value="et-ru">ET → RU</option>
+<option value="de-ru">DE → RU</option>
+
+</select>
+
+</div>
+
+<div id="card" class="card">
+
+<div id="word" class="word">loading...</div>
+<div id="translation" class="translation">?</div>
+
+</div>
+
+<div>
+
+<button onclick="flip()">Show</button>
+<button onclick="shuffleWords()">Shuffle</button>
+<button onclick="resetKnown()">Reset</button>
+<button onclick="speakAnswer()">🔊</button>
+<button onclick="archiveMode()">📖 Вспомнить</button>
+
+</div>
+
+<script>
+
+const sheetID="1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M"
+const sheetName="prilozenije"
+
+let rows=[]
+let words=[]
+let i=0
+
+let show=false
+let archive=false
+
+let stats={}
+
+const modeMap={
+
+"ru-en":{front:5,back:2,color:"#ffe4ec"},
+"ru-et":{front:5,back:4,color:"#e6f3ff"},
+"ru-de":{front:5,back:3,color:"#e8f7e8"},
+
+"en-ru":{front:2,back:5,color:"#ffe4ec"},
+"et-ru":{front:4,back:5,color:"#e6f3ff"},
+"de-ru":{front:3,back:5,color:"#e8f7e8"}
+
+}
+
+let currentMode="ru-en"
+
+function today(){
+
+let d=new Date()
+
+return new Date(d.getFullYear(),d.getMonth(),d.getDate())
+
+}
+
+function parseDate(str){
+
+let p=str.split(".")
+return new Date(2000+parseInt(p[2]),p[1]-1,p[0])
+
+}
+
+function loadWords(){
+
+const url=`https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName}`
+
+fetch(url)
+.then(r=>r.text())
+.then(text=>{
+
+const json=JSON.parse(text.substring(47).slice(0,-2))
+const rowsRaw=json.table.rows
+
+rows=rowsRaw.map(r=>[
+
+r.c[0]?.v||"",
+r.c[1]?.v||"",
+r.c[2]?.v||"",
+r.c[3]?.v||"",
+r.c[4]?.v||"",
+r.c[5]?.v||"",
+r.c[6]?.v||""
+
+])
+
+buildDeck()
+
+})
+
+}
+
+function buildDeck(){
+
+let map=modeMap[currentMode]
+
+words=[]
+
+rows.forEach(r=>{
+
+let w={
+id:r[0],
+word:r[map.front],
+translation:r[map.back],
+date:r[6]
+}
+
+if(!w.word||!w.translation)return
+
+let age=(today()-parseDate(w.date))/86400000
+
+if(!archive){
+
+if(age<=7)words.push(w)
+
+}else{
+
+if(age>7)words.push(w)
+
+}
+
+})
+
+shuffleWords()
+
+}
+
+function shuffleWords(){
+
+words.sort(()=>Math.random()-0.5)
+i=0
+show=false
+render()
+
+}
+
+function render(){
+
+if(!words.length){
+
+document.getElementById("word").innerText="нет слов"
+document.getElementById("translation").innerText=""
+return
+
+}
+
+let w=words[i]
+
+document.getElementById("word").innerText=w.word
+document.getElementById("translation").innerText=show?w.translation:"?"
+
+document.getElementById("card").style.background=modeMap[currentMode].color
+
+}
+
+function flip(){
+
+show=!show
+render()
+
+}
+
+function next(){
+
+i=(i+1)%words.length
+show=false
+render()
+
+}
+
+function changeMode(){
+
+currentMode=document.getElementById("modeSelect").value
+archive=false
+buildDeck()
+
+}
+
+function archiveMode(){
+
+archive=true
+
+words=words.sort(()=>Math.random()-0.5).slice(0,15)
+
+i=0
+render()
+
+}
+
+function speakAnswer(){
+
+if(!words.length)return
+
+let text=words[i].translation
+
+let u=new SpeechSynthesisUtterance(text)
+
+speechSynthesis.speak(u)
+
+}
+
+function resetKnown(){
+
+stats={}
+}
+
+let startX=0
+
+document.getElementById("card").addEventListener("touchstart",e=>{
+
+startX=e.changedTouches[0].clientX
+
+})
+
+document.getElementById("card").addEventListener("touchend",e=>{
+
+let dx=e.changedTouches[0].clientX-startX
+
+if(Math.abs(dx)<50)return
+
+let id=words[i].id
+
+if(!stats[id])stats[id]={l:0,r:0}
+
+if(dx<0){
+
+stats[id].l++
+
+}else{
+
+stats[id].r++
+
+}
+
+next()
+
+})
+
+loadWords()
+
+</script>
+
+</body>
+</html>
