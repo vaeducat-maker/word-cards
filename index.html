@@ -153,9 +153,6 @@ animation:confetti-fall 1.8s linear forwards;
 <option value="ru-en">RU → EN</option>
 <option value="ru-et">RU → ET</option>
 <option value="ru-de">RU → DE</option>
-<option value="en-ru">EN → RU</option>
-<option value="et-ru">ET → RU</option>
-<option value="de-ru">DE → RU</option>
 
 </select>
 </div>
@@ -196,25 +193,21 @@ let review=false;
 let animating=false;
 let celebrationPlayed=false;
 
+let currentMode=localStorage.getItem("lastMode")||"ru-en";
+
 const modeMap={
 
 "ru-en":{front:5,back:2,color:"#ffe8ef",speakLang:"en-US"},
 "ru-et":{front:5,back:4,color:"#e8f4ff",speakLang:"et-EE"},
-"ru-de":{front:5,back:3,color:"#eaf8ea",speakLang:"de-DE"},
-
-"en-ru":{front:2,back:5,color:"#ffe8ef",speakLang:"ru-RU"},
-"et-ru":{front:4,back:5,color:"#e8f4ff",speakLang:"ru-RU"},
-"de-ru":{front:3,back:5,color:"#eaf8ea",speakLang:"ru-RU"}
+"ru-de":{front:5,back:3,color:"#eaf8ea",speakLang:"de-DE"}
 
 };
 
-let currentMode="ru-en";
+document.getElementById("modeSelect").value=currentMode;
 
 function today(){
-
 const d=new Date();
 return new Date(d.getFullYear(),d.getMonth(),d.getDate());
-
 }
 
 function parseDate(v){
@@ -222,10 +215,8 @@ function parseDate(v){
 if(!v)return null;
 
 if(typeof v==="string"&&v.includes(".")){
-
 const p=v.split(".");
 return new Date(2000+Number(p[2]),Number(p[1])-1,Number(p[0]));
-
 }
 
 const d=new Date(v);
@@ -236,24 +227,17 @@ return null;
 }
 
 function getAgeInDays(d){
-
 const date=parseDate(d);
 if(!date)return 9999;
-
 return Math.floor((today()-date)/86400000);
-
 }
 
 function applyCardColor(){
-
 document.getElementById("card").style.background=modeMap[currentMode].color;
-
 }
 
 function updateCounter(){
-
 document.getElementById("counter").innerText=`Remaining: ${words.length}`;
-
 }
 
 function launchConfetti(){
@@ -345,13 +329,9 @@ else archive.push(w);
 });
 
 if(!review){
-
 words=[...active];
-
 }else{
-
 words=[...archive].sort(()=>Math.random()-.5).slice(0,20);
-
 }
 
 shuffleWords();
@@ -477,6 +457,8 @@ render();
 function changeMode(){
 
 currentMode=document.getElementById("modeSelect").value;
+
+localStorage.setItem("lastMode",currentMode);
 
 review=false;
 
