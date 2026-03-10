@@ -6,523 +6,1616 @@
 <title>Word Cards</title>
 
 <style>
-
 body{
-font-family:sans-serif;
-background:white;
-margin:0;
-padding:20px;
-text-align:center;
-color:#1f2937;
--webkit-tap-highlight-color:transparent;
+  font-family:sans-serif;
+  background:white;
+  margin:0;
+  padding:20px;
+  text-align:center;
+  color:#1f2937;
+  -webkit-tap-highlight-color:transparent;
 }
 
 h2{
-margin:0 0 16px;
-font-size:28px;
+  margin:0 0 16px;
+  font-size:28px;
 }
 
-.mode{
-margin-bottom:12px;
+.topbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
 }
 
 select{
-padding:10px 14px;
-border:none;
-border-radius:12px;
-font-size:16px;
-background:white;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  padding:10px 14px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  background:white;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
+.timer{
+  font-size:16px;
+  font-weight:700;
+  color:#475569;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.menu{
+  max-width:430px;
+  margin:0 auto 18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.menu button{
+  padding:18px 20px;
+  border:none;
+  border-radius:18px;
+  font-size:18px;
+  font-weight:700;
+  color:white;
+  box-shadow:0 6px 14px rgba(0,0,0,0.14);
+  cursor:pointer;
+}
+
+.btn-learn{ background:#5aa9ff; }
+.btn-cave{ background:#4b5d8a; }
+
 .counter{
-margin:10px auto 6px;
-font-size:16px;
-font-weight:600;
-color:#475569;
+  margin:10px auto 6px;
+  font-size:16px;
+  font-weight:600;
+  color:#475569;
 }
 
 .card{
-padding:40px 20px;
-border-radius:22px;
-margin:18px auto;
-max-width:420px;
-min-height:180px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-box-shadow:0 10px 24px rgba(0,0,0,0.12);
-transition:transform .22s ease,opacity .22s ease,background .2s ease;
-cursor:pointer;
-position:relative;
-overflow:hidden;
+  padding:40px 20px;
+  border-radius:22px;
+  margin:18px auto;
+  max-width:420px;
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+  transition:transform .22s ease,opacity .22s ease,background .2s ease;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  user-select:none;
+  -webkit-user-select:none;
 }
 
 .card.fly-left{
-transform:translateX(-120%) rotate(-10deg);
-opacity:0;
+  transform:translateX(-120%) rotate(-10deg);
+  opacity:0;
 }
 
 .card.fly-right{
-transform:translateX(120%) rotate(10deg);
-opacity:0;
+  transform:translateX(120%) rotate(10deg);
+  opacity:0;
 }
 
 .word{
-font-size:40px;
-margin-bottom:14px;
-line-height:1.2;
-word-break:break-word;
+  font-size:40px;
+  margin-bottom:14px;
+  line-height:1.2;
+  word-break:break-word;
 }
 
 .translation{
-font-size:28px;
-color:#374151;
-line-height:1.3;
-word-break:break-word;
-min-height:36px;
+  font-size:28px;
+  color:#374151;
+  line-height:1.3;
+  word-break:break-word;
+  min-height:36px;
 }
 
 .buttons{
-max-width:430px;
-margin:0 auto;
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:8px;
+  max-width:430px;
+  margin:0 auto;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
 }
 
 button{
-padding:12px 18px;
-border:none;
-border-radius:14px;
-font-size:15px;
-font-weight:600;
-cursor:pointer;
-color:white;
-box-shadow:0 4px 10px rgba(0,0,0,0.14);
+  padding:12px 18px;
+  border:none;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  color:white;
+  box-shadow:0 4px 10px rgba(0,0,0,0.14);
 }
 
 .btn-show{background:#5aa9ff;}
-.btn-shuffle{background:#8b7cff;}
+.btn-undo{background:#ef6c6c;}
 .btn-reset{background:#ff9b42;}
 .btn-sound{background:#4cc98b;}
-.btn-review{background:#4b5d8a;}
-.btn-undo{background:#ef6c6c;}
+.btn-back{background:#64748b;}
 
 .status{
-margin-top:12px;
-font-size:14px;
-color:#64748b;
-min-height:18px;
+  margin-top:12px;
+  font-size:14px;
+  color:#64748b;
+  min-height:18px;
+}
+
+.write-wrap{
+  max-width:430px;
+  margin:18px auto 0;
+}
+
+.write-card{
+  padding:26px 18px;
+  border-radius:22px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+  min-height:190px;
+}
+
+.write-prompt{
+  font-size:34px;
+  font-weight:700;
+  line-height:1.2;
+  margin-bottom:16px;
+  word-break:break-word;
+}
+
+.help-word{
+  font-size:24px;
+  font-weight:700;
+  color:#334155;
+  margin-bottom:12px;
+}
+
+.slots{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:18px;
+  min-height:48px;
+}
+
+.slot{
+  min-width:34px;
+  height:42px;
+  border-bottom:3px solid rgba(31,41,55,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  font-weight:700;
+  color:#1f2937;
+  padding:0 2px;
+}
+
+.slot.prefilled{
+  color:#334155;
+  opacity:.85;
+}
+
+.letter-pool,
+.keyboard{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+  min-height:52px;
+}
+
+.letter{
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  border:none;
+  background:#ffffff;
+  color:#1f2937;
+  font-size:20px;
+  font-weight:700;
+  box-shadow:0 4px 10px rgba(0,0,0,0.12);
+  cursor:pointer;
+}
+
+.keyboard-key{
+  min-width:42px;
+  height:42px;
+  padding:0 12px;
+  border-radius:12px;
+  border:none;
+  background:#ffffff;
+  color:#1f2937;
+  font-size:19px;
+  font-weight:700;
+  box-shadow:0 4px 10px rgba(0,0,0,0.12);
+  cursor:pointer;
+}
+
+.wrong{
+  animation:shake .24s ease;
+  background:#fecaca !important;
+  color:#991b1b !important;
+}
+
+@keyframes shake{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-4px);}
+  50%{transform:translateX(4px);}
+  75%{transform:translateX(-4px);}
+  100%{transform:translateX(0);}
+}
+
+.done-box{
+  max-width:420px;
+  margin:28px auto 0;
+  padding:24px 18px;
+  border-radius:20px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+  background:white;
+}
+
+.done-box h3{
+  margin:0 0 10px;
+  font-size:28px;
+}
+
+.done-box p{
+  margin:0;
+  font-size:16px;
+  color:#64748b;
 }
 
 .confetti-layer{
-position:fixed;
-inset:0;
-pointer-events:none;
-overflow:hidden;
-z-index:999;
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:999;
 }
 
 .confetti-piece{
-position:absolute;
-top:-20px;
-width:10px;
-height:14px;
-border-radius:3px;
-opacity:.9;
-animation:confetti-fall 1.8s linear forwards;
+  position:absolute;
+  top:-20px;
+  width:10px;
+  height:14px;
+  border-radius:3px;
+  opacity:.9;
+  animation:confetti-fall 1.8s linear forwards;
 }
 
 @keyframes confetti-fall{
-0%{transform:translateY(0) rotate(0deg);opacity:1;}
-100%{transform:translateY(110vh) rotate(540deg);opacity:0;}
+  0%{transform:translateY(0) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(540deg);opacity:0;}
 }
-
 </style>
 </head>
-
 <body>
 
 <h2>Word Cards</h2>
 
-<div class="mode">
-<select id="modeSelect" onchange="changeMode()">
-
-<option value="ru-en">RU → EN</option>
-<option value="ru-et">RU → ET</option>
-<option value="ru-de">RU → DE</option>
-
-</select>
+<div class="topbar">
+  <select id="modeSelect"></select>
+  <div id="timer" class="timer hidden">10:00</div>
 </div>
 
-<div id="counter" class="counter">Remaining:0</div>
-
-<div id="card" class="card" onclick="flip()">
-<div id="word" class="word">loading...</div>
-<div id="translation" class="translation">?</div>
+<div id="mainMenu" class="menu">
+  <button class="btn-learn" id="learnBtn">🃏 Learn</button>
+  <button class="btn-cave" id="caveBtn">🕳 Cave</button>
 </div>
 
-<div class="buttons">
+<div id="counter" class="counter hidden">Remaining: 0</div>
 
-<button class="btn-show" onclick="flip()">👁 Show</button>
-<button class="btn-undo" onclick="undo()">↩ Undo</button>
-<button class="btn-shuffle" onclick="shuffleWords()">🔀 Shuffle</button>
-<button class="btn-reset" onclick="resetDeck()">🔁 Reset</button>
-<button class="btn-sound" onclick="speakAnswer()">🔊 Sound</button>
-<button class="btn-review" onclick="reviewMode()">📖 Cave</button>
+<!-- cards -->
+<div id="cardsView" class="hidden">
+  <div id="card" class="card" onclick="flip()">
+    <div id="word" class="word">loading...</div>
+    <div id="translation" class="translation">?</div>
+  </div>
 
+  <div class="buttons">
+    <button class="btn-show" onclick="flip()">👁 Show</button>
+    <button class="btn-undo" onclick="undo()">↩ Undo</button>
+    <button class="btn-reset" onclick="resetCurrentMode()">🔁 Reset</button>
+    <button class="btn-sound" onclick="speakAnswer()">🔊 Sound</button>
+    <button class="btn-back" onclick="backToMenu()">⬅ Back</button>
+  </div>
+</div>
+
+<!-- writing -->
+<div id="writingView" class="hidden">
+  <div id="writeCard" class="write-card">
+    <div id="writePrompt" class="write-prompt">loading...</div>
+    <div id="helpWord" class="help-word hidden"></div>
+    <div id="slots" class="slots"></div>
+    <div id="letterPool" class="letter-pool hidden"></div>
+    <div id="keyboard" class="keyboard hidden"></div>
+  </div>
+
+  <div class="buttons" style="margin-top:14px;">
+    <button class="btn-reset" onclick="resetCurrentMode()">🔁 Reset</button>
+    <button class="btn-back" onclick="backToMenu()">⬅ Back</button>
+  </div>
+</div>
+
+<div id="doneBox" class="done-box hidden">
+  <h3>Session complete</h3>
+  <p>Great work today.</p>
 </div>
 
 <div id="confettiLayer" class="confetti-layer"></div>
 <div id="status" class="status"></div>
 
 <script>
+const sheetID = "1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M";
+const sheetName = "prilozenije";
 
-const sheetID="1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M";
-const sheetName="prilozenije";
+const SESSION_MS = 10 * 60 * 1000;
 
-let rows=[];
-let words=[];
-let history=[];
+const STORAGE_LAST_MODE = "lastMode_v3";
+const STORAGE_RESUME = "sessionResume_v3";
+const STORAGE_LEARN_STATE = "learnState_v3";
+const STORAGE_CAVE_STATE = "caveState_v3";
+const STORAGE_WRITING_STAGE = "writingStage_v3";
 
-let i=0;
-let show=false;
-let review=false;
-let animating=false;
-let celebrationPlayed=false;
-
-let currentMode=localStorage.getItem("lastMode")||"ru-en";
-
-const modeMap={
-
-"ru-en":{front:5,back:2,color:"#ffe8ef",speakLang:"en-US"},
-"ru-et":{front:5,back:4,color:"#e8f4ff",speakLang:"et-EE"},
-"ru-de":{front:5,back:3,color:"#eaf8ea",speakLang:"de-DE"}
-
+const modeMap = {
+  "ru-en": { front: 5, back: 2, color: "#ffe8ef", speakLang: "en-US", alphabet: "abcdefghijklmnopqrstuvwxyz" },
+  "ru-et": { front: 5, back: 4, color: "#e8f4ff", speakLang: "et-EE", alphabet: "abcdefghijklmnopqrsšzžtuvwõäöüxy" },
+  "ru-de": { front: 5, back: 3, color: "#eaf8ea", speakLang: "de-DE", alphabet: "abcdefghijklmnopqrstuvwxyzäöüß" }
 };
 
-document.getElementById("modeSelect").value=currentMode;
+const modeLabels = {
+  "ru-en": "RU → EN",
+  "ru-et": "RU → ET",
+  "ru-de": "RU → DE"
+};
+
+let rows = [];
+
+let currentMode = localStorage.getItem(STORAGE_LAST_MODE) || "ru-et";
+if(!modeMap[currentMode]) currentMode = "ru-et";
+
+let currentView = null; // learn-cards, learn-writing-1, learn-writing-2, learn-pro-1..4, cave-cards, cave-writing-1, cave-writing-2, cave-pro-1..4
+let sessionEnd = null;
+let timerId = null;
+
+let cardsWords = [];
+let cardsOriginal = [];
+let cardsHistory = [];
+let cardsIndex = 0;
+let cardsShow = false;
+let cardsAnimating = false;
+let cardsPendingShow = null;
+
+let writingDeck = [];
+let writingIndex = 0;
+let writingMistakes = 0;
+let writingHelpMode = false;
+let writingSuccessTarget = "left";
+
+let celebrationPlayed = false;
+
+const ui = {
+  modeSelect: document.getElementById("modeSelect"),
+  timer: document.getElementById("timer"),
+  mainMenu: document.getElementById("mainMenu"),
+  counter: document.getElementById("counter"),
+  cardsView: document.getElementById("cardsView"),
+  writingView: document.getElementById("writingView"),
+  doneBox: document.getElementById("doneBox"),
+  card: document.getElementById("card"),
+  word: document.getElementById("word"),
+  translation: document.getElementById("translation"),
+  status: document.getElementById("status"),
+  confettiLayer: document.getElementById("confettiLayer"),
+  writeCard: document.getElementById("writeCard"),
+  writePrompt: document.getElementById("writePrompt"),
+  helpWord: document.getElementById("helpWord"),
+  slots: document.getElementById("slots"),
+  letterPool: document.getElementById("letterPool"),
+  keyboard: document.getElementById("keyboard"),
+  learnBtn: document.getElementById("learnBtn"),
+  caveBtn: document.getElementById("caveBtn")
+};
+
+function saveLastMode(){
+  localStorage.setItem(STORAGE_LAST_MODE, currentMode);
+}
+
+function populateModes(){
+  ui.modeSelect.innerHTML = "";
+  Object.keys(modeMap).forEach(key => {
+    const opt = document.createElement("option");
+    opt.value = key;
+    opt.textContent = modeLabels[key];
+    if(key === currentMode) opt.selected = true;
+    ui.modeSelect.appendChild(opt);
+  });
+}
 
 function today(){
-const d=new Date();
-return new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  const d = new Date();
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 
 function parseDate(v){
+  if(!v) return null;
 
-if(!v)return null;
+  if(typeof v === "string" && v.includes(".")){
+    const p = v.split(".");
+    return new Date(2000 + Number(p[2]), Number(p[1]) - 1, Number(p[0]));
+  }
 
-if(typeof v==="string"&&v.includes(".")){
-const p=v.split(".");
-return new Date(2000+Number(p[2]),Number(p[1])-1,Number(p[0]));
+  const d = new Date(v);
+  if(!isNaN(d)) return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+  return null;
 }
 
-const d=new Date(v);
-if(!isNaN(d))return d;
-
-return null;
-
+function getAgeInDays(v){
+  const d = parseDate(v);
+  if(!d) return 9999;
+  return Math.floor((today() - d) / 86400000);
 }
 
-function getAgeInDays(d){
-const date=parseDate(d);
-if(!date)return 9999;
-return Math.floor((today()-date)/86400000);
+function setStatus(text=""){
+  ui.status.innerText = text;
 }
 
-function applyCardColor(){
-document.getElementById("card").style.background=modeMap[currentMode].color;
+function setCounter(n){
+  ui.counter.innerText = `Remaining: ${n}`;
 }
 
-function updateCounter(){
-document.getElementById("counter").innerText=`Remaining: ${words.length}`;
+function showSection(section){
+  ui.mainMenu.classList.add("hidden");
+  ui.cardsView.classList.add("hidden");
+  ui.writingView.classList.add("hidden");
+  ui.doneBox.classList.add("hidden");
+  ui.counter.classList.add("hidden");
+
+  if(section === "menu"){
+    ui.mainMenu.classList.remove("hidden");
+  }else if(section === "cards"){
+    ui.cardsView.classList.remove("hidden");
+    ui.counter.classList.remove("hidden");
+  }else if(section === "writing"){
+    ui.writingView.classList.remove("hidden");
+    ui.counter.classList.remove("hidden");
+  }else if(section === "done"){
+    ui.doneBox.classList.remove("hidden");
+  }
+}
+
+function applyColor(){
+  const color = modeMap[currentMode].color;
+  ui.card.style.background = color;
+  ui.writeCard.style.background = color;
 }
 
 function launchConfetti(){
+  if(celebrationPlayed) return;
+  celebrationPlayed = true;
 
-if(celebrationPlayed)return;
+  ui.confettiLayer.innerHTML = "";
+  const colors = ["#5aa9ff","#8b7cff","#ff9b42","#4cc98b","#ff6fa8","#ffd84d"];
 
-celebrationPlayed=true;
+  for(let n=0;n<28;n++){
+    const piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random()*100 + "%";
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    ui.confettiLayer.appendChild(piece);
+  }
 
-const layer=document.getElementById("confettiLayer");
-layer.innerHTML="";
-
-const colors=["#5aa9ff","#8b7cff","#ff9b42","#4cc98b","#ff6fa8","#ffd84d"];
-
-for(let n=0;n<28;n++){
-
-const piece=document.createElement("div");
-piece.className="confetti-piece";
-piece.style.left=Math.random()*100+"%";
-piece.style.background=colors[Math.floor(Math.random()*colors.length)];
-
-layer.appendChild(piece);
-
+  setTimeout(()=>ui.confettiLayer.innerHTML="",2200);
 }
 
-setTimeout(()=>layer.innerHTML="",2200);
-
+function resetConfetti(){
+  celebrationPlayed = false;
+  ui.confettiLayer.innerHTML = "";
 }
 
-function loadWords(){
+function startTimer(){
+  clearInterval(timerId);
+  sessionEnd = Date.now() + SESSION_MS;
+  ui.timer.classList.remove("hidden");
+  tickTimer();
+  timerId = setInterval(tickTimer, 1000);
+}
 
-const url=`https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
+function stopTimer(){
+  clearInterval(timerId);
+  timerId = null;
+  sessionEnd = null;
+  ui.timer.classList.add("hidden");
+}
 
-fetch(url)
+function tickTimer(){
+  if(!sessionEnd) return;
+  const ms = sessionEnd - Date.now();
 
-.then(r=>r.text())
+  if(ms <= 0){
+    ui.timer.textContent = "00:00";
+    finishSessionByTime();
+    return;
+  }
 
-.then(text=>{
+  const totalSec = Math.ceil(ms / 1000);
+  const min = String(Math.floor(totalSec / 60)).padStart(2,"0");
+  const sec = String(totalSec % 60).padStart(2,"0");
+  ui.timer.textContent = `${min}:${sec}`;
+}
 
-const json=JSON.parse(text.substring(47).slice(0,-2));
-const rowsRaw=json.table.rows||[];
+function saveResume(){
+  if(!currentView) return;
 
-rows=rowsRaw.map(r=>[
+  const data = {
+    mode: currentMode,
+    currentView,
+    sessionLeftMs: Math.max(0, sessionEnd ? sessionEnd - Date.now() : 0),
+    cardsWords,
+    cardsOriginal,
+    cardsHistory,
+    cardsIndex,
+    cardsShow,
+    writingDeck,
+    writingIndex,
+    writingMistakes,
+    writingHelpMode,
+    writingSuccessTarget
+  };
 
-r.c[0]?.v||"",
-r.c[1]?.v||"",
-r.c[2]?.v||"",
-r.c[3]?.v||"",
-r.c[4]?.v||"",
-r.c[5]?.v||"",
-r.c[6]?.f||r.c[6]?.v||""
+  localStorage.setItem(STORAGE_RESUME, JSON.stringify(data));
+}
 
-]);
+function loadResume(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_RESUME) || "null");
+  }catch{
+    return null;
+  }
+}
 
-buildDeck();
-
-});
-
+function clearResume(){
+  localStorage.removeItem(STORAGE_RESUME);
 }
 
 function getAllCardsForMode(){
+  const map = modeMap[currentMode];
 
-const map=modeMap[currentMode];
-
-return rows.map(r=>({
-
-id:r[0],
-word:r[map.front],
-translation:r[map.back],
-date:r[6]
-
-})).filter(w=>w.word&&w.translation);
-
+  return rows.map(r => ({
+    id: String(r[0]),
+    topic: r[1],
+    en: r[2],
+    de: r[3],
+    et: r[4],
+    ru: r[5],
+    date: r[6],
+    word: r[map.front],
+    translation: r[map.back]
+  })).filter(w => w.word && w.translation);
 }
 
-function buildDeck(){
+function getRecentPools(){
+  const all = getAllCardsForMode();
+  const last100 = all.slice(-100);
+  const archive = all.slice(0, Math.max(0, all.length - 100));
 
-const all=getAllCardsForMode();
-
-const active=[];
-const archive=[];
-
-all.forEach(w=>{
-
-const age=getAgeInDays(w.date);
-
-if(age<=7)active.push(w);
-else archive.push(w);
-
-});
-
-if(!review){
-words=[...active];
-}else{
-words=[...archive].sort(()=>Math.random()-.5).slice(0,20);
+  return {
+    recent100: last100,
+    archive
+  };
 }
 
-shuffleWords();
-
+function getLearnState(){
+  try{
+    const store = JSON.parse(localStorage.getItem(STORAGE_LEARN_STATE) || "{}");
+    return store[currentMode] || null;
+  }catch{
+    return null;
+  }
 }
 
-function shuffleWords(){
-
-words.sort(()=>Math.random()-.5);
-
-i=0;
-show=false;
-
-render();
-
+function setLearnState(state){
+  let store = {};
+  try{
+    store = JSON.parse(localStorage.getItem(STORAGE_LEARN_STATE) || "{}");
+  }catch{}
+  store[currentMode] = state;
+  localStorage.setItem(STORAGE_LEARN_STATE, JSON.stringify(store));
 }
 
-function render(){
-
-applyCardColor();
-updateCounter();
-
-if(!words.length){
-
-document.getElementById("word").innerText="🎉 Great job!";
-document.getElementById("translation").innerText="";
-launchConfetti();
-return;
-
+function createInitialLearnState(){
+  const { recent100 } = getRecentPools();
+  const active = recent100.slice(-20);
+  const review = recent100.slice(0, Math.max(0, recent100.length - 20));
+  return {
+    currentIds: active.map(x => x.id),
+    reviewIds: review.map(x => x.id)
+  };
 }
 
-const w=words[i];
+function getValidLearnState(){
+  const { recent100 } = getRecentPools();
+  const byId = Object.fromEntries(recent100.map(x => [x.id, x]));
+  let state = getLearnState();
 
-document.getElementById("word").innerText=w.word;
-document.getElementById("translation").innerText=show?w.translation:"?";
+  if(!state){
+    state = createInitialLearnState();
+    setLearnState(state);
+    return state;
+  }
 
+  state.currentIds = (state.currentIds || []).filter(id => byId[id]);
+  state.reviewIds = (state.reviewIds || []).filter(id => byId[id] && !state.currentIds.includes(id));
+
+  if(state.currentIds.length < 20){
+    state = createInitialLearnState();
+    setLearnState(state);
+  }
+
+  return state;
+}
+
+function advanceLearnState(){
+  const { recent100 } = getRecentPools();
+  const byId = Object.fromEntries(recent100.map(x => [x.id, x]));
+  const state = getValidLearnState();
+
+  const currentIds = state.currentIds;
+  const reviewIds = state.reviewIds;
+
+  const newestCandidates = recent100
+    .map(x => x.id)
+    .filter(id => !currentIds.includes(id) && !reviewIds.includes(id));
+
+  const new10 = newestCandidates.slice(-10);
+  const prev5 = currentIds.slice(0, 5);
+  const review5 = reviewIds.slice(-5);
+
+  let next = [...new10, ...prev5, ...review5];
+
+  const used = new Set(next);
+  if(next.length < 20){
+    const fill = recent100.map(x => x.id).filter(id => !used.has(id)).slice(-1 * (20 - next.length));
+    next = [...next, ...fill];
+  }
+
+  const mergedReview = [...reviewIds, ...currentIds];
+  const dedupReview = [];
+  const seen = new Set();
+  mergedReview.forEach(id => {
+    if(!seen.has(id) && !next.includes(id) && byId[id]){
+      seen.add(id);
+      dedupReview.push(id);
+    }
+  });
+
+  const newState = {
+    currentIds: next.slice(0,20),
+    reviewIds: dedupReview.slice(-80)
+  };
+
+  setLearnState(newState);
+  return newState;
+}
+
+function buildLearnCardsDeck(){
+  const state = getValidLearnState();
+  const { recent100 } = getRecentPools();
+  const byId = Object.fromEntries(recent100.map(x => [x.id, x]));
+  return state.currentIds.map(id => byId[id]).filter(Boolean);
+}
+
+function getCaveState(){
+  try{
+    const store = JSON.parse(localStorage.getItem(STORAGE_CAVE_STATE) || "{}");
+    return store[currentMode] || null;
+  }catch{
+    return null;
+  }
+}
+
+function setCaveState(state){
+  let store = {};
+  try{
+    store = JSON.parse(localStorage.getItem(STORAGE_CAVE_STATE) || "{}");
+  }catch{}
+  store[currentMode] = state;
+  localStorage.setItem(STORAGE_CAVE_STATE, JSON.stringify(store));
+}
+
+function createInitialCaveState(){
+  const { archive } = getRecentPools();
+  const core = archive.slice(-10).map(x => x.id);
+  return {
+    dayIndex: 0,
+    coreIds: core,
+    randomHistory: []
+  };
+}
+
+function buildCaveCardsDeck(){
+  const { archive } = getRecentPools();
+  const byId = Object.fromEntries(archive.map(x => [x.id, x]));
+  if(!archive.length) return [];
+
+  let state = getCaveState();
+  if(!state){
+    state = createInitialCaveState();
+    setCaveState(state);
+  }
+
+  let coreIds = (state.coreIds || []).filter(id => byId[id]);
+  if(coreIds.length < 10){
+    state = createInitialCaveState();
+    setCaveState(state);
+    coreIds = state.coreIds;
+  }
+
+  const coreWords = coreIds.map(id => byId[id]).filter(Boolean);
+  const exclude = new Set(coreIds);
+  const randomWords = archive.filter(x => !exclude.has(x.id)).sort(()=>Math.random()-.5).slice(0,10);
+
+  state.randomHistory[state.dayIndex] = randomWords.map(x => x.id);
+  setCaveState(state);
+
+  return [...coreWords, ...randomWords];
+}
+
+function advanceCaveState(){
+  const { archive } = getRecentPools();
+  const byId = Object.fromEntries(archive.map(x => [x.id, x]));
+  if(!archive.length) return;
+
+  let state = getCaveState();
+  if(!state){
+    state = createInitialCaveState();
+  }
+
+  state.dayIndex += 1;
+
+  if(state.dayIndex >= 5){
+    const newCore = [];
+    for(let d=0; d<5; d++){
+      const arr = (state.randomHistory[d] || []).filter(id => byId[id]);
+      const shuffled = [...arr].sort(()=>Math.random()-.5).slice(0,2);
+      newCore.push(...shuffled);
+    }
+
+    const uniqueCore = [...new Set(newCore)].filter(id => byId[id]);
+    let finalCore = uniqueCore.slice(0,10);
+
+    if(finalCore.length < 10){
+      const fill = archive.map(x => x.id).filter(id => !finalCore.includes(id)).sort(()=>Math.random()-.5).slice(0,10-finalCore.length);
+      finalCore = [...finalCore, ...fill];
+    }
+
+    state = {
+      dayIndex: 0,
+      coreIds: finalCore,
+      randomHistory: []
+    };
+  }
+
+  setCaveState(state);
+}
+
+function getWritingStageStore(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_WRITING_STAGE) || "{}");
+  }catch{
+    return {};
+  }
+}
+
+function setWritingStageStore(store){
+  localStorage.setItem(STORAGE_WRITING_STAGE, JSON.stringify(store));
+}
+
+function getWritingStage(wordId){
+  const store = getWritingStageStore();
+  return store[currentMode]?.[wordId] || 1;
+}
+
+function bumpWritingStage(wordId){
+  const store = getWritingStageStore();
+  if(!store[currentMode]) store[currentMode] = {};
+  const cur = store[currentMode][wordId] || 1;
+  store[currentMode][wordId] = Math.min(4, cur + 1);
+  setWritingStageStore(store);
+}
+
+function getPrimaryForm(fullWord){
+  if(currentMode === "ru-et"){
+    return fullWord.split(",")[0].trim();
+  }
+  if(currentMode === "ru-de"){
+    return fullWord.split("—")[0].trim();
+  }
+  return fullWord.trim();
+}
+
+function buildWritingDeckFromWords(sourceWords, count, usePro = false){
+  const slice = sourceWords.slice(0, count);
+
+  return slice.map(w => ({
+    id: w.id,
+    prompt: w.ru,
+    answer: usePro ? w.word.trim() : getPrimaryForm(w.word),
+    fullRow: w.word.trim(),
+    stage: usePro ? 4 : getWritingStage(w.id)
+  }));
+}
+
+function buildProDecksFrom20Words(sourceWords){
+  const list = sourceWords.map(w => ({
+    id: w.id,
+    prompt: w.ru,
+    answer: w.word.trim(),
+    fullRow: w.word.trim(),
+    stage: 4
+  }));
+
+  return [
+    list.slice(0,5),
+    list.slice(5,10),
+    list.slice(10,15),
+    list.slice(15,20)
+  ];
+}
+
+function resetCardsState(words){
+  cardsWords = [...words];
+  cardsOriginal = [...words];
+  cardsHistory = [];
+  cardsIndex = 0;
+  cardsShow = false;
+  cardsAnimating = false;
+  if(cardsPendingShow){
+    clearTimeout(cardsPendingShow);
+    cardsPendingShow = null;
+  }
+}
+
+function startNewSession(type){
+  resetConfetti();
+  clearResume();
+  startTimer();
+
+  if(type === "learn"){
+    const learnWords = buildLearnCardsDeck();
+    resetCardsState(learnWords);
+    currentView = "learn-cards";
+    setStatus("Cards");
+    showSection("cards");
+    renderCards();
+    saveResume();
+    return;
+  }
+
+  if(type === "cave"){
+    const caveWords = buildCaveCardsDeck();
+    resetCardsState(caveWords);
+    currentView = "cave-cards";
+    setStatus("Cave Cards");
+    showSection("cards");
+    renderCards();
+    saveResume();
+  }
+}
+
+function continueFromResume(data){
+  currentMode = data.currentMode;
+  ui.modeSelect.value = currentMode;
+  saveLastMode();
+
+  if(data.sessionLeftMs && data.sessionLeftMs > 0){
+    clearInterval(timerId);
+    sessionEnd = Date.now() + data.sessionLeftMs;
+    ui.timer.classList.remove("hidden");
+    tickTimer();
+    timerId = setInterval(tickTimer, 1000);
+  }else{
+    startTimer();
+  }
+
+  currentView = data.currentView;
+  cardsWords = data.cardsWords || [];
+  cardsOriginal = data.cardsOriginal || [];
+  cardsHistory = data.cardsHistory || [];
+  cardsIndex = data.cardsIndex || 0;
+  cardsShow = data.cardsShow || false;
+
+  writingDeck = data.writingDeck || [];
+  writingIndex = data.writingIndex || 0;
+  writingMistakes = data.writingMistakes || 0;
+  writingHelpMode = data.writingHelpMode || false;
+  writingSuccessTarget = data.writingSuccessTarget || "left";
+
+  if(currentView.includes("cards")){
+    showSection("cards");
+    renderCards();
+  }else{
+    showSection("writing");
+    renderWriting();
+  }
+}
+
+function finishSessionByTime(){
+  stopTimer();
+  saveResume();
+  showSection("done");
+}
+
+function finishFlowStep(){
+  if(currentView === "learn-cards"){
+    currentView = "learn-writing-1";
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,10), 10, false);
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing 1");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "learn-writing-1"){
+    currentView = "learn-writing-2";
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(10,20), 10, false);
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing 2");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "learn-writing-2"){
+    currentView = "learn-pro-1";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[0];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing Pro 1");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "learn-pro-1"){
+    currentView = "learn-pro-2";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[1];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing Pro 2");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "learn-pro-2"){
+    currentView = "learn-pro-3";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[2];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing Pro 3");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "learn-pro-3"){
+    currentView = "learn-pro-4";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[3];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing Pro 4");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "learn-pro-4"){
+    advanceLearnState();
+    launchConfetti();
+    showSection("done");
+    clearResume();
+    return;
+  }
+
+  if(currentView === "cave-cards"){
+    currentView = "cave-writing-1";
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,10), 10, false);
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Cave Writing 1");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "cave-writing-1"){
+    currentView = "cave-writing-2";
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(10,20), 10, false);
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Cave Writing 2");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "cave-writing-2"){
+    currentView = "cave-pro-1";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[0];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Cave Pro 1");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "cave-pro-1"){
+    currentView = "cave-pro-2";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[1];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Cave Pro 2");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "cave-pro-2"){
+    currentView = "cave-pro-3";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[2];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Cave Pro 3");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "cave-pro-3"){
+    currentView = "cave-pro-4";
+    writingDeck = buildProDecksFrom20Words(cardsOriginal)[3];
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Cave Pro 4");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  if(currentView === "cave-pro-4"){
+    advanceCaveState();
+    launchConfetti();
+    showSection("done");
+    clearResume();
+  }
+}
+
+function renderCards(){
+  applyColor();
+  setCounter(cardsWords.length);
+
+  if(!cardsWords.length){
+    finishFlowStep();
+    return;
+  }
+
+  const w = cardsWords[cardsIndex];
+  ui.word.innerText = w.word;
+  ui.translation.innerText = cardsShow ? w.translation : "?";
 }
 
 function flip(){
+  if(!cardsWords.length || cardsAnimating) return;
 
-if(!words.length)return;
+  if(cardsPendingShow){
+    clearTimeout(cardsPendingShow);
+    cardsPendingShow = null;
+  }
 
-show=!show;
+  if(cardsShow){
+    cardsShow = false;
+    renderCards();
+    saveResume();
+    return;
+  }
 
-render();
-
+  ui.translation.innerText = "...";
+  cardsPendingShow = setTimeout(() => {
+    cardsShow = true;
+    renderCards();
+    saveResume();
+    cardsPendingShow = null;
+  }, 800);
 }
 
-function animateAndRun(dir,callback){
+function animateCards(direction, callback){
+  if(cardsAnimating || !cardsWords.length) return;
+  cardsAnimating = true;
 
-if(animating)return;
+  const cls = direction === "left" ? "fly-left" : "fly-right";
+  ui.card.classList.add(cls);
 
-animating=true;
-
-const card=document.getElementById("card");
-
-const cls=dir==="left"?"fly-left":"fly-right";
-
-card.classList.add(cls);
-
-setTimeout(()=>{
-
-callback();
-card.classList.remove(cls);
-animating=false;
-
-},220);
-
+  setTimeout(() => {
+    callback();
+    ui.card.classList.remove(cls);
+    cardsAnimating = false;
+  }, 220);
 }
 
 function remember(){
+  if(!cardsWords.length) return;
 
-if(!words.length)return;
-
-animateAndRun("left",()=>{
-
-history.push(words[i]);
-
-words.splice(i,1);
-
-if(i>=words.length)i=0;
-
-show=false;
-
-render();
-
-});
-
+  animateCards("left", () => {
+    cardsHistory.push({ card: cardsWords[cardsIndex], action: "left" });
+    cardsWords.splice(cardsIndex, 1);
+    if(cardsIndex >= cardsWords.length) cardsIndex = 0;
+    cardsShow = false;
+    renderCards();
+    saveResume();
+  });
 }
 
 function notRemember(){
+  if(!cardsWords.length) return;
 
-if(!words.length)return;
+  animateCards("right", () => {
+    const w = cardsWords.splice(cardsIndex, 1)[0];
+    cardsHistory.push({ card: w, action: "right" });
 
-animateAndRun("right",()=>{
+    let newIndex = cardsIndex + 2;
+    if(newIndex > cardsWords.length) newIndex = cardsWords.length;
+    cardsWords.splice(newIndex, 0, w);
 
-const w=words.splice(i,1)[0];
-
-history.push(w);
-
-words.splice(i+2,0,w);
-
-show=false;
-
-render();
-
-});
-
+    cardsShow = false;
+    renderCards();
+    saveResume();
+  });
 }
 
 function undo(){
-
-if(!history.length)return;
-
-const w=history.pop();
-
-words.splice(i,0,w);
-
-render();
-
+  if(!cardsHistory.length) return;
+  const last = cardsHistory.pop();
+  cardsWords.splice(cardsIndex, 0, last.card);
+  cardsShow = false;
+  renderCards();
+  saveResume();
 }
 
-function changeMode(){
+function resetCurrentMode(){
+  resetConfetti();
 
-currentMode=document.getElementById("modeSelect").value;
+  if(currentView.includes("cards")){
+    cardsWords = [...cardsOriginal];
+    cardsHistory = [];
+    cardsIndex = 0;
+    cardsShow = false;
+    renderCards();
+    saveResume();
+    return;
+  }
 
-localStorage.setItem("lastMode",currentMode);
+  if(currentView === "learn-writing-1"){
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,10), 10, false);
+  }else if(currentView === "learn-writing-2"){
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(10,20), 10, false);
+  }else if(currentView === "cave-writing-1"){
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,10), 10, false);
+  }else if(currentView === "cave-writing-2"){
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(10,20), 10, false);
+  }else{
+    const proDecks = buildProDecksFrom20Words(cardsOriginal);
+    if(currentView.endsWith("pro-1")) writingDeck = proDecks[0];
+    if(currentView.endsWith("pro-2")) writingDeck = proDecks[1];
+    if(currentView.endsWith("pro-3")) writingDeck = proDecks[2];
+    if(currentView.endsWith("pro-4")) writingDeck = proDecks[3];
+  }
 
-review=false;
-
-buildDeck();
-
-}
-
-function reviewMode(){
-
-review=true;
-
-buildDeck();
-
+  writingIndex = 0;
+  writingMistakes = 0;
+  writingHelpMode = false;
+  writingSuccessTarget = "left";
+  renderWriting();
+  saveResume();
 }
 
 function speakAnswer(){
+  if(!cardsShow || !cardsWords.length) return;
+  const text = cardsWords[cardsIndex].translation;
+  if(!text) return;
 
-if(!show)return;
-
-const text=words[i].translation;
-
-const u=new SpeechSynthesisUtterance(text);
-
-u.lang=modeMap[currentMode].speakLang;
-
-speechSynthesis.cancel();
-speechSynthesis.speak(u);
-
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = modeMap[currentMode].speakLang;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
 }
 
-function resetDeck(){
-
-review=false;
-
-buildDeck();
-
+function getAlphabetForCurrentMode(){
+  return modeMap[currentMode].alphabet.split("");
 }
 
-let startX=0;
-let startY=0;
+function normalizeChars(answer){
+  return answer.split("");
+}
 
-const card=document.getElementById("card");
+function buildStageTemplate(answer, stage){
+  const chars = normalizeChars(answer);
+  const len = chars.length;
 
-card.addEventListener("touchstart",e=>{
+  if(stage === 1){
+    return {
+      filled: Array(len).fill(""),
+      locked: Array(len).fill(false),
+      pool: chars,
+      drag: true
+    };
+  }
 
-startX=e.changedTouches[0].clientX;
-startY=e.changedTouches[0].clientY;
+  let blanks = 2;
+  if(stage === 3) blanks = Math.max(4, Math.ceil(len * 0.67));
+  if(stage >= 4) blanks = len;
 
-},{passive:true});
+  const filled = [...chars];
+  const locked = Array(len).fill(true);
+  const indices = [...Array(len).keys()].sort(()=>Math.random()-.5).slice(0,blanks);
 
-card.addEventListener("touchend",e=>{
+  indices.forEach(idx => {
+    filled[idx] = "";
+    locked[idx] = false;
+  });
 
-const dx=e.changedTouches[0].clientX-startX;
-const dy=e.changedTouches[0].clientY-startY;
+  const keyboardCount = stage >= 4 ? 15 : 10;
+  const alphabet = getAlphabetForCurrentMode();
+  const unique = [...new Set(chars)];
+  const pool = [...unique];
 
-if(Math.abs(dx)<50||Math.abs(dx)<Math.abs(dy))return;
+  while(pool.length < keyboardCount){
+    const rnd = alphabet[Math.floor(Math.random()*alphabet.length)];
+    if(!pool.includes(rnd)) pool.push(rnd);
+  }
 
-if(dx<0)remember();
-else notRemember();
+  return {
+    filled,
+    locked,
+    pool: pool.sort(()=>Math.random()-.5),
+    drag: false
+  };
+}
 
-},{passive:true});
+function getFirstEmptyIndex(arr){
+  return arr.findIndex(x => x === "");
+}
+
+function renderWriting(){
+  applyColor();
+  setCounter(Math.max(0, writingDeck.length - writingIndex));
+
+  if(writingIndex >= writingDeck.length){
+    finishFlowStep();
+    return;
+  }
+
+  const item = writingDeck[writingIndex];
+  const stage = item.stage;
+  const tpl = buildStageTemplate(item.answer, stage);
+
+  item._filled = tpl.filled;
+  item._locked = tpl.locked;
+  item._pool = tpl.pool;
+  item._drag = tpl.drag;
+
+  ui.writePrompt.innerText = item.prompt;
+  ui.helpWord.classList.add("hidden");
+  ui.helpWord.innerText = "";
+  ui.letterPool.classList.toggle("hidden", !tpl.drag);
+  ui.keyboard.classList.toggle("hidden", tpl.drag);
+
+  ui.slots.innerHTML = "";
+  tpl.filled.forEach((ch, idx) => {
+    const slot = document.createElement("div");
+    slot.className = "slot" + (tpl.locked[idx] && ch ? " prefilled" : "");
+    slot.textContent = ch || "";
+    ui.slots.appendChild(slot);
+  });
+
+  ui.letterPool.innerHTML = "";
+  if(tpl.drag){
+    tpl.pool.forEach(ch => {
+      const b = document.createElement("button");
+      b.className = "letter";
+      b.textContent = ch;
+      b.addEventListener("click", () => placeDragLetter(ch, b));
+      ui.letterPool.appendChild(b);
+    });
+  }
+
+  ui.keyboard.innerHTML = "";
+  if(!tpl.drag){
+    tpl.pool.forEach(ch => {
+      const key = document.createElement("button");
+      key.className = "keyboard-key";
+      key.textContent = ch;
+      key.addEventListener("click", () => handleKeyboardInput(ch, key));
+      ui.keyboard.appendChild(key);
+    });
+  }
+
+  writingMistakes = 0;
+  writingHelpMode = false;
+  writingSuccessTarget = "left";
+}
+
+function refreshSlots(){
+  const item = writingDeck[writingIndex];
+  [...ui.slots.children].forEach((slot, idx) => {
+    slot.textContent = item._filled[idx] || "";
+  });
+}
+
+function placeDragLetter(ch, btn){
+  const item = writingDeck[writingIndex];
+  const idx = getFirstEmptyIndex(item._filled);
+  if(idx === -1) return;
+  item._filled[idx] = ch;
+  btn.remove();
+  refreshSlots();
+  if(item._filled.join("") === item.answer){
+    handleWritingSuccess("left");
+  }
+}
+
+function handleKeyboardInput(ch, btn){
+  const item = writingDeck[writingIndex];
+  const idx = getFirstEmptyIndex(item._filled);
+  if(idx === -1) return;
+
+  const correct = item.answer[idx];
+
+  if(ch === correct){
+    item._filled[idx] = ch;
+    refreshSlots();
+
+    if(item._filled.join("") === item.answer){
+      handleWritingSuccess(writingSuccessTarget);
+    }
+    return;
+  }
+
+  writingMistakes += 1;
+  btn.classList.add("wrong");
+  setTimeout(()=>btn.classList.remove("wrong"), 260);
+
+  if(writingMistakes >= 3){
+    enterWritingHelpMode();
+  }
+}
+
+function enterWritingHelpMode(){
+  const item = writingDeck[writingIndex];
+  writingHelpMode = true;
+  writingSuccessTarget = "right";
+
+  ui.helpWord.classList.remove("hidden");
+  ui.helpWord.innerText = item.answer;
+
+  item._filled = Array(item.answer.length).fill("");
+  item._locked = Array(item.answer.length).fill(false);
+
+  const alphabet = getAlphabetForCurrentMode();
+  const unique = [...new Set(item.answer.split(""))];
+  const pool = [...unique];
+  while(pool.length < 15){
+    const rnd = alphabet[Math.floor(Math.random()*alphabet.length)];
+    if(!pool.includes(rnd)) pool.push(rnd);
+  }
+  item._pool = pool.sort(()=>Math.random()-.5);
+
+  ui.slots.innerHTML = "";
+  item._filled.forEach(() => {
+    const slot = document.createElement("div");
+    slot.className = "slot";
+    ui.slots.appendChild(slot);
+  });
+
+  ui.letterPool.classList.add("hidden");
+  ui.keyboard.classList.remove("hidden");
+  ui.keyboard.innerHTML = "";
+
+  item._pool.forEach(ch => {
+    const key = document.createElement("button");
+    key.className = "keyboard-key";
+    key.textContent = ch;
+    key.addEventListener("click", () => handleKeyboardInput(ch, key));
+    ui.keyboard.appendChild(key);
+  });
+
+  refreshSlots();
+}
+
+function animateWriting(direction, callback){
+  if(cardsAnimating) return;
+  cardsAnimating = true;
+
+  const cls = direction === "left" ? "fly-left" : "fly-right";
+  ui.writeCard.classList.add(cls);
+
+  setTimeout(() => {
+    callback();
+    ui.writeCard.classList.remove(cls);
+    cardsAnimating = false;
+  }, 220);
+}
+
+function handleWritingSuccess(direction){
+  const item = writingDeck[writingIndex];
+
+  if(direction === "left" && !currentView.includes("pro-")){
+    bumpWritingStage(item.id);
+  }
+
+  if(direction === "right" && currentView.includes("pro-")){
+    animateWriting("right", () => {
+      const w = writingDeck.splice(writingIndex,1)[0];
+      writingDeck.push(w);
+      writingMistakes = 0;
+      writingHelpMode = false;
+      writingSuccessTarget = "left";
+      renderWriting();
+      saveResume();
+    });
+    return;
+  }
+
+  animateWriting(direction, () => {
+    writingIndex += 1;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    renderWriting();
+    saveResume();
+  });
+}
+
+function backToMenu(){
+  stopTimer();
+  clearResume();
+  currentView = null;
+  setStatus("");
+  showSection("menu");
+}
+
+function loadWords(){
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+
+  fetch(url)
+    .then(r => r.text())
+    .then(text => {
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      const rowsRaw = json.table.rows || [];
+
+      rows = rowsRaw.map(r => [
+        r.c[0]?.v || "",
+        r.c[1]?.v || "",
+        r.c[2]?.v || "",
+        r.c[3]?.v || "",
+        r.c[4]?.v || "",
+        r.c[5]?.v || "",
+        r.c[6]?.f || r.c[6]?.v || ""
+      ]);
+
+      initApp();
+    })
+    .catch(() => {
+      ui.word.innerText = "Loading error";
+      ui.translation.innerText = "";
+      setStatus("Check sheet or access");
+    });
+}
+
+function initApp(){
+  populateModes();
+  ui.modeSelect.value = currentMode;
+  saveLastMode();
+  applyColor();
+
+  const resume = loadResume();
+
+  if(resume && resume.currentMode === currentMode){
+    continueFromResume(resume);
+  }else{
+    showSection("menu");
+  }
+}
+
+ui.modeSelect.addEventListener("change", () => {
+  currentMode = ui.modeSelect.value;
+  saveLastMode();
+  clearResume();
+  stopTimer();
+  currentView = null;
+  setStatus("");
+  applyColor();
+  showSection("menu");
+});
+
+ui.learnBtn.addEventListener("click", () => startNewSession("learn"));
+ui.caveBtn.addEventListener("click", () => startNewSession("cave"));
+
+let startX = 0;
+let startY = 0;
+
+ui.card.addEventListener("touchstart", e => {
+  startX = e.changedTouches[0].clientX;
+  startY = e.changedTouches[0].clientY;
+}, { passive: true });
+
+ui.card.addEventListener("touchend", e => {
+  if(!currentView || !currentView.includes("cards")) return;
+
+  const dx = e.changedTouches[0].clientX - startX;
+  const dy = e.changedTouches[0].clientY - startY;
+
+  if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+
+  if(dx < 0) remember();
+  else notRemember();
+}, { passive: true });
 
 loadWords();
-
 </script>
 </body>
 </html>
