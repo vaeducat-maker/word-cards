@@ -876,15 +876,21 @@ function bumpWritingStage(wordId){
 /* ================= WRITING HELPERS ================= */
 
 function getPrimaryForm(fullWord){
+
   if(currentMode === "ru-et"){
-    return fullWord.split(",")[0].trim();
+    return fullWord
+      .split("–")[0]
+      .split("-")[0]
+      .split(",")[0]
+      .trim();
   }
+
   if(currentMode === "ru-de"){
     return fullWord.split("—")[0].trim();
   }
+
   return fullWord.trim();
 }
-
 function buildWritingDeckFromWords(sourceWords, count, usePro = false){
   const slice = sourceWords.slice(0, count);
 
