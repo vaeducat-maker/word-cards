@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Word Cards</title>
 
+<!-- ================= CSS ================= -->
 <style>
 body{
   font-family:sans-serif;
@@ -306,18 +307,22 @@ button{
 
 <h2>Word Cards</h2>
 
+<!-- ================= HTML: TOP BAR ================= -->
 <div class="topbar">
   <select id="modeSelect"></select>
   <div id="timer" class="timer hidden">10:00</div>
 </div>
 
+<!-- ================= HTML: MAIN MENU ================= -->
 <div id="mainMenu" class="menu">
   <button class="btn-learn" id="learnBtn">🃏 Learn</button>
   <button class="btn-cave" id="caveBtn">🕳 Cave</button>
 </div>
 
+<!-- ================= HTML: COMMON COUNTER ================= -->
 <div id="counter" class="counter hidden">Remaining: 0</div>
 
+<!-- ================= HTML: CARDS VIEW ================= -->
 <div id="cardsView" class="hidden">
   <div id="card" class="card" onclick="flip()">
     <div id="word" class="word">loading...</div>
@@ -333,6 +338,7 @@ button{
   </div>
 </div>
 
+<!-- ================= HTML: WRITING VIEW ================= -->
 <div id="writingView" class="hidden">
   <div id="writeCard" class="write-card">
     <div id="writePrompt" class="write-prompt">loading...</div>
@@ -348,15 +354,21 @@ button{
   </div>
 </div>
 
+<!-- ================= HTML: DONE BOX ================= -->
 <div id="doneBox" class="done-box hidden">
   <h3>Session complete</h3>
   <p>Great work today.</p>
 </div>
 
+<!-- ================= HTML: EXTRA UI ================= -->
 <div id="confettiLayer" class="confetti-layer"></div>
 <div id="status" class="status"></div>
 
+<!-- ================= JAVASCRIPT ================= -->
 <script>
+
+/* ================= SETTINGS ================= */
+
 const sheetID = "1-4xkhAAXy0lWbbcWsFHuauzUyyckj-RkLPQJ-s4503M";
 const sheetName = "prilozenije";
 
@@ -379,6 +391,8 @@ const modeLabels = {
   "ru-et": "RU → ET",
   "ru-de": "RU → DE"
 };
+
+/* ================= GLOBAL STATE ================= */
 
 let rows = [];
 
@@ -405,6 +419,8 @@ let writingSuccessTarget = "left";
 
 let celebrationPlayed = false;
 
+/* ================= UI REFERENCES ================= */
+
 const ui = {
   modeSelect: document.getElementById("modeSelect"),
   timer: document.getElementById("timer"),
@@ -427,6 +443,8 @@ const ui = {
   learnBtn: document.getElementById("learnBtn"),
   caveBtn: document.getElementById("caveBtn")
 };
+
+/* ================= HELPERS: BASIC ================= */
 
 function saveLastMode(){
   localStorage.setItem(STORAGE_LAST_MODE, currentMode);
@@ -502,6 +520,8 @@ function applyColor(){
   ui.writeCard.style.background = color;
 }
 
+/* ================= HELPERS: CONFETTI ================= */
+
 function launchConfetti(){
   if(celebrationPlayed) return;
   celebrationPlayed = true;
@@ -524,6 +544,8 @@ function resetConfetti(){
   celebrationPlayed = false;
   ui.confettiLayer.innerHTML = "";
 }
+
+/* ================= TIMER ================= */
 
 function startTimer(){
   clearInterval(timerId);
@@ -555,6 +577,8 @@ function tickTimer(){
   const sec = String(totalSec % 60).padStart(2,"0");
   ui.timer.textContent = `${min}:${sec}`;
 }
+
+/* ================= SAVE / LOAD SESSION ================= */
 
 function saveResume(){
   if(!currentView) return;
@@ -590,6 +614,8 @@ function clearResume(){
   localStorage.removeItem(STORAGE_RESUME);
 }
 
+/* ================= WORD DATA ================= */
+
 function makeStableId(rawId, rowIndex){
   const cleaned = String(rawId || "").trim();
   return `${cleaned || "row"}__${rowIndex}`;
@@ -621,6 +647,8 @@ function getRecentPools(){
     archive
   };
 }
+
+/* ================= LEARN STATE ================= */
 
 function getLearnState(){
   try{
@@ -722,6 +750,8 @@ function buildLearnCardsDeck(){
   return state.currentIds.map(id => byId[id]).filter(Boolean);
 }
 
+/* ================= CAVE STATE ================= */
+
 function getCaveState(){
   try{
     const store = JSON.parse(localStorage.getItem(STORAGE_CAVE_STATE) || "{}");
@@ -816,6 +846,8 @@ function advanceCaveState(){
   setCaveState(state);
 }
 
+/* ================= WRITING STAGE STATE ================= */
+
 function getWritingStageStore(){
   try{
     return JSON.parse(localStorage.getItem(STORAGE_WRITING_STAGE) || "{}");
@@ -840,6 +872,8 @@ function bumpWritingStage(wordId){
   store[currentMode][wordId] = Math.min(4, cur + 1);
   setWritingStageStore(store);
 }
+
+/* ================= WRITING HELPERS ================= */
 
 function getPrimaryForm(fullWord){
   if(currentMode === "ru-et"){
@@ -880,6 +914,8 @@ function buildProDecksFrom20Words(sourceWords){
   ];
 }
 
+/* ================= CARDS STATE ================= */
+
 function resetCardsState(words){
   cardsWords = [...words];
   cardsOriginal = [...words];
@@ -901,6 +937,8 @@ function pushCardsSnapshot(){
     show: cardsShow
   });
 }
+
+/* ================= SESSION START / RESTORE ================= */
 
 function startNewSession(type){
   resetConfetti();
@@ -971,6 +1009,8 @@ function finishSessionByTime(){
   saveResume();
   showSection("done");
 }
+
+/* ================= FLOW BETWEEN LEVELS ================= */
 
 function finishFlowStep(){
   if(currentView === "learn-cards"){
@@ -1157,6 +1197,8 @@ function finishFlowStep(){
   }
 }
 
+/* ================= CARDS RENDER ================= */
+
 function renderCards(){
   applyColor();
   setCounter(cardsWords.length);
@@ -1170,6 +1212,8 @@ function renderCards(){
   ui.word.innerText = w.word;
   ui.translation.innerText = cardsShow ? w.translation : "?";
 }
+
+/* ================= CARDS ACTIONS ================= */
 
 function flip(){
   if(!cardsWords.length || cardsAnimating) return;
@@ -1298,6 +1342,8 @@ function speakAnswer(){
   speechSynthesis.speak(u);
 }
 
+/* ================= WRITING HELPERS ================= */
+
 function getAlphabetForCurrentMode(){
   return modeMap[currentMode].alphabet.split("");
 }
@@ -1353,6 +1399,8 @@ function buildStageTemplate(answer, stage){
 function getFirstEmptyIndex(arr){
   return arr.findIndex(x => x === "");
 }
+
+/* ================= WRITING RENDER ================= */
 
 function renderWriting(){
   applyColor();
@@ -1419,6 +1467,8 @@ function refreshSlots(){
     slot.textContent = item._filled[idx] || "";
   });
 }
+
+/* ================= WRITING ACTIONS ================= */
 
 function placeDragLetter(ch, btn){
   const item = writingDeck[writingIndex];
@@ -1544,6 +1594,8 @@ function handleWritingSuccess(direction){
   });
 }
 
+/* ================= NAVIGATION ================= */
+
 function backToMenu(){
   stopTimer();
   clearResume();
@@ -1551,6 +1603,8 @@ function backToMenu(){
   setStatus("");
   showSection("menu");
 }
+
+/* ================= LOAD DATA ================= */
 
 function loadWords(){
   const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
@@ -1580,6 +1634,8 @@ function loadWords(){
     });
 }
 
+/* ================= INIT APP ================= */
+
 function initApp(){
   populateModes();
   ui.modeSelect.value = currentMode;
@@ -1594,6 +1650,8 @@ function initApp(){
     showSection("menu");
   }
 }
+
+/* ================= EVENTS ================= */
 
 ui.modeSelect.addEventListener("change", () => {
   currentMode = ui.modeSelect.value;
@@ -1628,6 +1686,8 @@ ui.card.addEventListener("touchend", e => {
   if(dx < 0) remember();
   else notRemember();
 }, { passive: true });
+
+/* ================= START ================= */
 
 loadWords();
 </script>
