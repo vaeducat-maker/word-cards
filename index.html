@@ -857,8 +857,8 @@ function buildWritingDeckFromWords(sourceWords, count, usePro = false){
   return slice.map(w => ({
     id: w.id,
     prompt: w.ru,
-    answer: usePro ? w.word.trim() : getPrimaryForm(w.word),
-    fullRow: w.word.trim(),
+    answer: usePro ? w.translation.trim() : getPrimaryForm(w.translation),
+    fullRow: w.translation.trim(),
     stage: usePro ? 4 : getWritingStage(w.id)
   }));
 }
@@ -867,8 +867,8 @@ function buildProDecksFrom20Words(sourceWords){
   const list = sourceWords.map(w => ({
     id: w.id,
     prompt: w.ru,
-    answer: w.word.trim(),
-    fullRow: w.word.trim(),
+    answer: w.translation.trim(),
+    fullRow: w.translation.trim(),
     stage: 4
   }));
 
@@ -1314,7 +1314,7 @@ function buildStageTemplate(answer, stage){
     return {
       filled: Array(len).fill(""),
       locked: Array(len).fill(false),
-      pool: chars,
+      pool: [...chars].sort(()=>Math.random()-.5),
       drag: true
     };
   }
