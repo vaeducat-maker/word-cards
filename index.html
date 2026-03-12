@@ -318,7 +318,6 @@ button{
 
 <div id="counter" class="counter hidden">Remaining: 0</div>
 
-<!-- cards -->
 <div id="cardsView" class="hidden">
   <div id="card" class="card" onclick="flip()">
     <div id="word" class="word">loading...</div>
@@ -334,7 +333,6 @@ button{
   </div>
 </div>
 
-<!-- writing -->
 <div id="writingView" class="hidden">
   <div id="writeCard" class="write-card">
     <div id="writePrompt" class="write-prompt">loading...</div>
@@ -364,11 +362,11 @@ const sheetName = "prilozenije";
 
 const SESSION_MS = 10 * 60 * 1000;
 
-const STORAGE_LAST_MODE = "lastMode_v3";
-const STORAGE_RESUME = "sessionResume_v3";
-const STORAGE_LEARN_STATE = "learnState_v3";
-const STORAGE_CAVE_STATE = "caveState_v3";
-const STORAGE_WRITING_STAGE = "writingStage_v3";
+const STORAGE_LAST_MODE = "lastMode_v4";
+const STORAGE_RESUME = "sessionResume_v4";
+const STORAGE_LEARN_STATE = "learnState_v4";
+const STORAGE_CAVE_STATE = "caveState_v4";
+const STORAGE_WRITING_STAGE = "writingStage_v4";
 
 const modeMap = {
   "ru-en": { front: 5, back: 2, color: "#ffe8ef", speakLang: "en-US", alphabet: "abcdefghijklmnopqrstuvwxyz" },
@@ -387,7 +385,7 @@ let rows = [];
 let currentMode = localStorage.getItem(STORAGE_LAST_MODE) || "ru-et";
 if(!modeMap[currentMode]) currentMode = "ru-et";
 
-let currentView = null; // learn-cards, learn-writing-1, learn-writing-2, learn-pro-1..4, cave-cards, cave-writing-1, cave-writing-2, cave-pro-1..4
+let currentView = null;
 let sessionEnd = null;
 let timerId = null;
 
@@ -562,7 +560,7 @@ function saveResume(){
   if(!currentView) return;
 
   const data = {
-    mode: currentMode,
+    currentMode,
     currentView,
     sessionLeftMs: Math.max(0, sessionEnd ? sessionEnd - Date.now() : 0),
     cardsWords,
@@ -592,11 +590,16 @@ function clearResume(){
   localStorage.removeItem(STORAGE_RESUME);
 }
 
+function makeStableId(rawId, rowIndex){
+  const cleaned = String(rawId || "").trim();
+  return `${cleaned || "row"}__${rowIndex}`;
+}
+
 function getAllCardsForMode(){
   const map = modeMap[currentMode];
 
-  return rows.map(r => ({
-    id: String(r[0]),
+  return rows.map((r, rowIndex) => ({
+    id: makeStableId(r[0], rowIndex),
     topic: r[1],
     en: r[2],
     de: r[3],
@@ -888,6 +891,15 @@ function resetCardsState(words){
     clearTimeout(cardsPendingShow);
     cardsPendingShow = null;
   }
+}
+
+function pushCardsSnapshot(){
+  cardsHistory.push({
+    words: cardsWords.map(x => ({...x})),
+    original: cardsOriginal.map(x => ({...x})),
+    index: cardsIndex,
+    show: cardsShow
+  });
 }
 
 function startNewSession(type){
@@ -1201,7 +1213,7 @@ function remember(){
   if(!cardsWords.length) return;
 
   animateCards("left", () => {
-    cardsHistory.push({ card: cardsWords[cardsIndex], action: "left" });
+    pushCardsSnapshot();
     cardsWords.splice(cardsIndex, 1);
     if(cardsIndex >= cardsWords.length) cardsIndex = 0;
     cardsShow = false;
@@ -1214,8 +1226,8 @@ function notRemember(){
   if(!cardsWords.length) return;
 
   animateCards("right", () => {
+    pushCardsSnapshot();
     const w = cardsWords.splice(cardsIndex, 1)[0];
-    cardsHistory.push({ card: w, action: "right" });
 
     let newIndex = cardsIndex + 2;
     if(newIndex > cardsWords.length) newIndex = cardsWords.length;
@@ -1229,9 +1241,11 @@ function notRemember(){
 
 function undo(){
   if(!cardsHistory.length) return;
-  const last = cardsHistory.pop();
-  cardsWords.splice(cardsIndex, 0, last.card);
-  cardsShow = false;
+  const snap = cardsHistory.pop();
+  cardsWords = snap.words.map(x => ({...x}));
+  cardsOriginal = snap.original.map(x => ({...x}));
+  cardsIndex = snap.index;
+  cardsShow = snap.show;
   renderCards();
   saveResume();
 }
