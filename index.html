@@ -1362,25 +1362,46 @@ function normalizeChars(answer){
 }
 
 function buildStageTemplate(answer, stage){
-  const chars = normalizeChars(answer);
-  const len = chars.length;
+  const chars = answer.split("");
+  const fixedChars = [" ", "-", ",", ".", ":", ";", "!", "?", "(", ")", "'", "\""];
 
   if(stage === 1){
-    const filled = Array(len).fill("");
-    const locked = Array(len).fill(false);
+    const filled = [];
+    const locked = [];
+    const pool = [];
 
-    if(len > 0){
-      filled[0] = chars[0];
-      locked[0] = true;
-    }
+    let newWord = true;
+
+    chars.forEach(ch => {
+      const isFixed = fixedChars.includes(ch);
+
+      if(isFixed){
+        filled.push(ch);
+        locked.push(true);
+        newWord = true;
+        return;
+      }
+
+      if(newWord){
+        filled.push(ch);
+        locked.push(true);
+        newWord = false;
+      }else{
+        filled.push("");
+        locked.push(false);
+        pool.push(ch);
+      }
+    });
 
     return {
       filled,
       locked,
-      pool: chars.slice(1).sort(()=>Math.random()-.5),
+      pool: pool.sort(()=>Math.random()-.5),
       drag: true
     };
   }
+
+  const len = chars.length;
 
   let blanks = 2;
   if(stage === 3) blanks = Math.max(4, Math.ceil(len * 0.67));
@@ -1388,7 +1409,12 @@ function buildStageTemplate(answer, stage){
 
   const filled = [...chars];
   const locked = Array(len).fill(true);
-  const indices = [...Array(len).keys()].sort(()=>Math.random()-.5).slice(0,blanks);
+
+  const letterIndices = chars
+    .map((ch, idx) => fixedChars.includes(ch) ? null : idx)
+    .filter(idx => idx !== null);
+
+  const indices = [...letterIndices].sort(()=>Math.random()-.5).slice(0, blanks);
 
   indices.forEach(idx => {
     filled[idx] = "";
@@ -1397,7 +1423,7 @@ function buildStageTemplate(answer, stage){
 
   const keyboardCount = stage >= 4 ? 15 : 10;
   const alphabet = getAlphabetForCurrentMode();
-  const unique = [...new Set(chars)];
+  const unique = [...new Set(chars.filter(ch => !fixedChars.includes(ch)))];
   const pool = [...unique];
 
   while(pool.length < keyboardCount){
@@ -1412,7 +1438,6 @@ function buildStageTemplate(answer, stage){
     drag: false
   };
 }
-
 function getFirstEmptyIndex(arr){
   return arr.findIndex(x => x === "");
 }
