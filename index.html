@@ -862,8 +862,7 @@ function setWritingStageStore(store){
 }
 
 function getWritingStage(wordId){
-  const store = getWritingStageStore();
-  return store[currentMode]?.[wordId] || 1;
+  return 1;
 }
 
 function bumpWritingStage(wordId){
