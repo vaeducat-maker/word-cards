@@ -1684,6 +1684,14 @@ function initApp(){
   ui.modeSelect.value = currentMode;
   saveLastMode();
   applyColor();
+ ui.soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
+  ui.soundToggle.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+
+  localStorage.setItem("soundEnabled_v1", soundEnabled ? "1" : "0");
+
+  ui.soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
+});
 
   const resume = loadResume();
 
