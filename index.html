@@ -1531,8 +1531,13 @@ setTimeout(() => {
   }
 
   writingMistakes += 1;
-  btn.classList.add("wrong");
-  setTimeout(()=>btn.classList.remove("wrong"), 260);
+btn.classList.add("wrong");
+
+if(soundEnabled){
+  new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_0a2b7b6c7b.mp3?filename=error-126627.mp3").play();
+}
+
+setTimeout(() => btn.classList.remove("wrong"), 260);
 
   if(writingMistakes >= 3){
     enterWritingHelpMode();
