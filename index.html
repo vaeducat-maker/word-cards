@@ -492,7 +492,7 @@ function setStatus(text=""){
 }
 
 function setCounter(n){
-  ui.counter.innerText = Remaining: ${n};
+  ui.counter.innerText = `Remaining: ${n}`;
 }
 
 function showSection(section){
@@ -576,7 +576,7 @@ function tickTimer(){
   const totalSec = Math.ceil(ms / 1000);
   const min = String(Math.floor(totalSec / 60)).padStart(2,"0");
   const sec = String(totalSec % 60).padStart(2,"0");
-  ui.timer.textContent = ${min}:${sec};
+  ui.timer.textContent = `${min}:${sec}`;
 }
 
 /* ================= SAVE / LOAD SESSION ================= */
@@ -619,7 +619,7 @@ function clearResume(){
 
 function makeStableId(rawId, rowIndex){
   const cleaned = String(rawId || "").trim();
-  return ${cleaned || "row"}__${rowIndex};
+  return `${cleaned || "row"}__${rowIndex}`;
 }
 
 function getAllCardsForMode(){
@@ -1639,7 +1639,7 @@ function backToMenu(){
 /* ================= LOAD DATA ================= */
 
 function loadWords(){
-  const url = https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)};
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
   fetch(url)
     .then(r => r.text())
