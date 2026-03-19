@@ -1514,6 +1514,9 @@ function placeDragLetter(ch, btn){
 
   if(ch === correct){
     item._filled[idx] = ch;
+    if(soundEnabled){
+  new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=correct-2-46134.mp3").play();
+}
     btn.remove();
     refreshSlots();
 
