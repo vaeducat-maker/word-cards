@@ -1443,58 +1443,6 @@ function buildStageTemplate(answer, stage){
     drag: false
   };
 }
-{
-  const chars = normalizeChars(answer);
-  const len = chars.length;
-
-  if(stage === 1){
-    const filled = Array(len).fill("");
-    const locked = Array(len).fill(false);
-
-    if(len > 0){
-      filled[0] = chars[0];
-      locked[0] = true;
-    }
-
-    return {
-      filled,
-      locked,
-      pool: chars.slice(1).sort(()=>Math.random()-.5),
-      drag: true
-    };
-  }
-
-  let blanks = 2;
-  if(stage === 3) blanks = Math.max(4, Math.ceil(len * 0.67));
-  if(stage >= 4) blanks = len;
-
-  const filled = [...chars];
-  const locked = Array(len).fill(true);
-  const indices = [...Array(len).keys()].sort(()=>Math.random()-.5).slice(0,blanks);
-
-  indices.forEach(idx => {
-    filled[idx] = "";
-    locked[idx] = false;
-  });
-
-  const keyboardCount = stage >= 4 ? 15 : 10;
-  const alphabet = getAlphabetForCurrentMode();
-  const unique = [...new Set(chars)];
-  const pool = [...unique];
-
-  while(pool.length < keyboardCount){
-    const rnd = alphabet[Math.floor(Math.random()*alphabet.length)];
-    if(!pool.includes(rnd)) pool.push(rnd);
-  }
-
-  return {
-    filled,
-    locked,
-    pool: pool.sort(()=>Math.random()-.5),
-    drag: false
-  };
-}
-
 function getFirstEmptyIndex(arr){
   return arr.findIndex(x => x === "");
 }
