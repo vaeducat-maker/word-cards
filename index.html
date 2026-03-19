@@ -403,6 +403,8 @@ const modeLabels = {
 
 let rows = [];
 
+let soundEnabled = localStorage.getItem("soundEnabled_v1") !== "0"; 
+
 let currentMode = localStorage.getItem(STORAGE_LAST_MODE) || "ru-et";
 if(!modeMap[currentMode]) currentMode = "ru-et";
 
