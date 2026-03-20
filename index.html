@@ -1527,8 +1527,32 @@ tpl.filled.forEach((ch, idx) => {
 
 function refreshSlots(){
   const item = writingDeck[writingIndex];
-  [...ui.slots.children].forEach((slot, idx) => {
-    slot.textContent = item._filled[idx] || "";
+  ui.slots.innerHTML = "";
+
+  item._filled.forEach((ch, idx) => {
+    if(ch === " "){
+      const spacer = document.createElement("div");
+      spacer.style.width = "22px";
+      spacer.style.height = "42px";
+      spacer.style.display = "inline-block";
+      ui.slots.appendChild(spacer);
+      return;
+    }
+
+    const slot = document.createElement("div");
+    const isFixed = ch === "-" || ch === "," || ch === "." || ch === ":" || ch === ";" || ch === "!" || ch === "?" || ch === "(" || ch === ")" || ch === "'" || ch === "\"";
+
+    slot.className = "slot" + (item._locked[idx] && ch && !isFixed ? " prefilled" : "");
+
+    if(isFixed){
+      slot.style.borderBottom = "none";
+      slot.style.minWidth = "18px";
+      slot.textContent = ch;
+    }else{
+      slot.textContent = ch || "";
+    }
+
+    ui.slots.appendChild(slot);
   });
 }
 
