@@ -1474,28 +1474,30 @@ function renderWriting(){
 
   ui.slots.innerHTML = "";
 tpl.filled.forEach((ch, idx) => {
+  if(ch === " "){
+    const spacer = document.createElement("div");
+    spacer.style.width = "22px";
+    spacer.style.height = "42px";
+    spacer.style.display = "inline-block";
+    ui.slots.appendChild(spacer);
+    return;
+  }
+
   const slot = document.createElement("div");
-  const isFixed = ch === " " || ch === "-" || ch === "," || ch === "." || ch === ":" || ch === ";" || ch === "!" || ch === "?" || ch === "(" || ch === ")" || ch === "'" || ch === "\"";
+  const isFixed = ch === "-" || ch === "," || ch === "." || ch === ":" || ch === ";" || ch === "!" || ch === "?" || ch === "(" || ch === ")" || ch === "'" || ch === "\"";
 
   slot.className = "slot" + (tpl.locked[idx] && ch && !isFixed ? " prefilled" : "");
 
   if(isFixed){
     slot.style.borderBottom = "none";
-
-    if(ch === " "){
-      slot.style.minWidth = "18px";
-      slot.textContent = "";
-    }else{
-      slot.textContent = ch;
-      slot.style.minWidth = "18px";
-    }
+    slot.style.minWidth = "18px";
+    slot.textContent = ch;
   }else{
     slot.textContent = ch || "";
   }
 
   ui.slots.appendChild(slot);
 });
-
   ui.letterPool.innerHTML = "";
   if(tpl.drag){
     tpl.pool.forEach(ch => {
