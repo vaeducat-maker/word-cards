@@ -1569,6 +1569,7 @@ function placeDragLetter(ch, btn){
 
   if(ch === correct){
     item._filled[idx] = ch;
+    writingMistakes = 0;
     btn.style.background = "#bbf7d0";
     btn.style.transform = "scale(1.12)";
     btn.style.transition = "all 0.15s ease";
