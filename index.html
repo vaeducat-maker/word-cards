@@ -1632,21 +1632,31 @@ function enterWritingHelpMode(){
   ui.helpWord.classList.remove("hidden");
   ui.helpWord.innerText = item.answer;
 
-  ui.writeCard.style.transition = "background 1.8s ease, transform 1.8s ease";
-  ui.writeCard.style.background = "#fecaca";
+  ui.slots.innerHTML = "";
+  ui.letterPool.innerHTML = "";
+  ui.keyboard.innerHTML = "";
 
-  ui.helpWord.style.transition = "all 1.8s ease";
-  ui.helpWord.style.color = "#991b1b";
-  ui.helpWord.style.fontSize = "54px";
-  ui.helpWord.style.fontWeight = "800";
-  ui.helpWord.style.lineHeight = "1.15";
-  ui.helpWord.style.marginTop = "10px";
-  ui.helpWord.style.transform = "scale(1.18)";
-  ui.helpWord.style.textAlign = "center";
+  ui.letterPool.classList.add("hidden");
+  ui.keyboard.classList.add("hidden");
+
+  ui.writeCard.style.transition = "background 1.8s ease";
+  ui.writeCard.style.background = "#fecaca";
 
   ui.writePrompt.style.color = "#111111";
   ui.writePrompt.style.fontSize = "28px";
-  ui.writePrompt.style.marginBottom = "22px";
+  ui.writePrompt.style.fontWeight = "700";
+  ui.writePrompt.style.marginBottom = "24px";
+  ui.writePrompt.style.lineHeight = "1.2";
+
+  ui.helpWord.style.color = "#b91c1c";
+  ui.helpWord.style.fontSize = "64px";
+  ui.helpWord.style.fontWeight = "900";
+  ui.helpWord.style.lineHeight = "1.1";
+  ui.helpWord.style.textAlign = "center";
+  ui.helpWord.style.marginTop = "18px";
+  ui.helpWord.style.marginBottom = "10px";
+  ui.helpWord.style.transform = "scale(1)";
+  ui.helpWord.style.transition = "all 1.8s ease";
 
   if(writingAutoFailTimeout){
     clearTimeout(writingAutoFailTimeout);
@@ -1654,7 +1664,7 @@ function enterWritingHelpMode(){
 
   writingAutoFailTimeout = setTimeout(() => {
     handleWritingSuccess("right");
-  }, 2600);
+  }, 3200);
 }
 function animateWriting(direction, callback){
   if(cardsAnimating) return;
