@@ -1632,15 +1632,30 @@ function enterWritingHelpMode(){
   ui.helpWord.classList.remove("hidden");
   ui.helpWord.innerText = item.answer;
 
+  ui.writeCard.style.transition = "background 1.8s ease, transform 1.8s ease";
+  ui.writeCard.style.background = "#fecaca";
+
+  ui.helpWord.style.transition = "all 1.8s ease";
+  ui.helpWord.style.color = "#991b1b";
+  ui.helpWord.style.fontSize = "54px";
+  ui.helpWord.style.fontWeight = "800";
+  ui.helpWord.style.lineHeight = "1.15";
+  ui.helpWord.style.marginTop = "10px";
+  ui.helpWord.style.transform = "scale(1.18)";
+  ui.helpWord.style.textAlign = "center";
+
+  ui.writePrompt.style.color = "#111111";
+  ui.writePrompt.style.fontSize = "28px";
+  ui.writePrompt.style.marginBottom = "22px";
+
   if(writingAutoFailTimeout){
     clearTimeout(writingAutoFailTimeout);
   }
 
   writingAutoFailTimeout = setTimeout(() => {
     handleWritingSuccess("right");
-  }, 700);
+  }, 2600);
 }
-
 function animateWriting(direction, callback){
   if(cardsAnimating) return;
   cardsAnimating = true;
