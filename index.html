@@ -1606,6 +1606,7 @@ function handleKeyboardInput(ch, btn){
 
   if(ch === correct){
     item._filled[idx] = ch;
+    writingMistakes = 0;
     refreshSlots();
 
     if(item._filled.join("") === item.answer){
