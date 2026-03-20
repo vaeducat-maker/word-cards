@@ -1473,12 +1473,28 @@ function renderWriting(){
   ui.keyboard.classList.toggle("hidden", tpl.drag);
 
   ui.slots.innerHTML = "";
-  tpl.filled.forEach((ch, idx) => {
-    const slot = document.createElement("div");
-    slot.className = "slot" + (tpl.locked[idx] && ch ? " prefilled" : "");
+tpl.filled.forEach((ch, idx) => {
+  const slot = document.createElement("div");
+  const isFixed = ch === " " || ch === "-" || ch === "," || ch === "." || ch === ":" || ch === ";" || ch === "!" || ch === "?" || ch === "(" || ch === ")" || ch === "'" || ch === "\"";
+
+  slot.className = "slot" + (tpl.locked[idx] && ch && !isFixed ? " prefilled" : "");
+
+  if(isFixed){
+    slot.style.borderBottom = "none";
+
+    if(ch === " "){
+      slot.style.minWidth = "18px";
+      slot.textContent = "";
+    }else{
+      slot.textContent = ch;
+      slot.style.minWidth = "18px";
+    }
+  }else{
     slot.textContent = ch || "";
-    ui.slots.appendChild(slot);
-  });
+  }
+
+  ui.slots.appendChild(slot);
+});
 
   ui.letterPool.innerHTML = "";
   if(tpl.drag){
