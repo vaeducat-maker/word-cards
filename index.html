@@ -623,18 +623,16 @@ function makeStableId(rawId, rowIndex){
 }
 
 function getAllCardsForMode(){
-  const map = modeMap[currentMode];
-
   return rows.map((r, rowIndex) => ({
     id: makeStableId(r[0], rowIndex),
-    topic: r[1],
-    en: r[2],
-    de: r[3],
-    et: r[4],
-    ru: r[5],
+    type: r[1],
+    et: String(r[2] || "").trim(),
+    et_form2: String(r[3] || "").trim(),
+    et_form3: String(r[4] || "").trim(),
+    ru: String(r[5] || "").trim(),
     date: r[6],
-    word: r[map.front],
-    translation: r[map.back]
+    word: String(r[5] || "").trim(),
+    translation: String(r[2] || "").trim()
   })).filter(w => w.word && w.translation);
 }
 
