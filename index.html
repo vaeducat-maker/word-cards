@@ -657,7 +657,18 @@ function getWordProgress(wordId){
 
   return store[wordId];
 }
+function updateWordProgress(wordId, patch){
+  const store = getWordProgressStore();
+  const current = getWordProgress(wordId);
 
+  store[wordId] = {
+    ...current,
+    ...patch
+  };
+
+  setWordProgressStore(store);
+}
+  
 /* ================= WORD DATA ================= */
 
 function makeStableId(rawId, rowIndex){
