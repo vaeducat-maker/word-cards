@@ -1364,7 +1364,14 @@ function notRemember(){
 
   animateCards("right", () => {
     pushCardsSnapshot();
+
     const w = cardsWords.splice(cardsIndex, 1)[0];
+    const progress = getWordProgress(w.id);
+
+    updateWordProgress(w.id, {
+      errorCount: progress.errorCount + 1,
+      status: "learning"
+    });
 
     let newIndex = cardsIndex + 2;
     if(newIndex > cardsWords.length) newIndex = cardsWords.length;
