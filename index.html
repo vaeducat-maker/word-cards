@@ -991,6 +991,7 @@ function startNewSession(type){
   resetConfetti();
   clearResume();
   startTimer();
+  currentSessionId = Date.now().toString();
 
   if(type === "learn"){
   const learnWords = buildLearnCardsDeck();
