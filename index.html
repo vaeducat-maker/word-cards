@@ -1268,13 +1268,12 @@ function flip(){
     return;
   }
 
-  ui.translation.innerText = "...";
-  cardsPendingShow = setTimeout(() => {
-    cardsShow = true;
-    renderCards();
-    saveResume();
-    cardsPendingShow = null;
-  }, 800);
+  function flip(){
+  if(!cardsWords.length || cardsAnimating) return;
+
+  cardsShow = !cardsShow;
+  renderCards();
+  saveResume();
 }
 
 function animateCards(direction, callback){
