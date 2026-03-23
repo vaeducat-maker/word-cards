@@ -1795,9 +1795,21 @@ function handleWritingSuccess(direction){
 
   const item = writingDeck[writingIndex];
 
-  if(direction === "left" && !currentView.includes("pro-")){
+  if(direction === "left"){
+  const progress = getWordProgress(item.id);
+
+  if(progress.writeSessionId !== currentSessionId){
+    updateWordProgress(item.id, {
+      correctWrite: progress.correctWrite + 1,
+      writeSessionId: currentSessionId,
+      status: "learning"
+    });
+  }
+
+  if(!currentView.includes("pro-")){
     bumpWritingStage(item.id);
   }
+}
 
   if(direction === "right"){
     animateWriting("right", () => {
