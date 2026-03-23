@@ -1593,15 +1593,25 @@ function handleKeyboardInput(ch, btn){
   const correct = item.answer[idx];
 
   if(ch === correct){
-    item._filled[idx] = ch;
-    writingMistakes = 0;
+  item._filled[idx] = ch;
+  writingMistakes = 0;
+
+  btn.style.background = "#bbf7d0";
+  btn.style.transform = "scale(1.08)";
+  btn.style.transition = "all 0.15s ease";
+
+  setTimeout(() => {
+    btn.style.background = "#ffffff";
+    btn.style.transform = "scale(1)";
     refreshSlots();
 
     if(item._filled.join("") === item.answer){
       handleWritingSuccess(writingSuccessTarget);
     }
-    return;
-  }
+  }, 150);
+
+  return;
+}
 
   writingMistakes += 1;
   btn.classList.add("wrong");
