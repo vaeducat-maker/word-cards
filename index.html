@@ -718,10 +718,10 @@ function advanceLearnState(){
   let next = [...new10, ...prev5, ...review5];
 
   const used = new Set(next);
-  if(next.length < 20){
-    const fill = recent100.map(x => x.id).filter(id => !used.has(id)).slice(-1 * (20 - next.length));
-    next = [...next, ...fill];
-  }
+  if(next.length < 16){
+  const fill = recent100.map(x => x.id).filter(id => !used.has(id)).slice(-1 * (16 - next.length));
+  next = [...next, ...fill];
+}
 
   const mergedReview = [...reviewIds, ...currentIds];
   const dedupReview = [];
