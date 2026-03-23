@@ -1007,7 +1007,7 @@ function finishSessionByTime(){
 function finishFlowStep(){
   if(currentView === "learn-cards"){
     currentView = "learn-writing-1";
-    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,10), 10, false);
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,8), 8, false);
     writingIndex = 0;
     writingMistakes = 0;
     writingHelpMode = false;
@@ -1021,7 +1021,7 @@ function finishFlowStep(){
 
   if(currentView === "learn-writing-1"){
     currentView = "learn-writing-2";
-    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(10,20), 10, false);
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(8,16), 8, false);
     writingIndex = 0;
     writingMistakes = 0;
     writingHelpMode = false;
@@ -1035,7 +1035,7 @@ function finishFlowStep(){
 
   if(currentView === "learn-writing-2"){
     currentView = "learn-pro-1";
-    writingDeck = buildProDecksFrom20Words(cardsOriginal)[0];
+    writingDeck = buildProDecksFrom16Words(cardsOriginal)[0];
     writingIndex = 0;
     writingMistakes = 0;
     writingHelpMode = false;
@@ -1049,7 +1049,7 @@ function finishFlowStep(){
 
   if(currentView === "learn-pro-1"){
     currentView = "learn-pro-2";
-    writingDeck = buildProDecksFrom20Words(cardsOriginal)[1];
+    writingDeck = buildProDecksFrom16Words(cardsOriginal)[1];
     writingIndex = 0;
     writingMistakes = 0;
     writingHelpMode = false;
@@ -1063,7 +1063,7 @@ function finishFlowStep(){
 
   if(currentView === "learn-pro-2"){
     currentView = "learn-pro-3";
-    writingDeck = buildProDecksFrom20Words(cardsOriginal)[2];
+    writingDeck = buildProDecksFrom16Words(cardsOriginal)[2];
     writingIndex = 0;
     writingMistakes = 0;
     writingHelpMode = false;
@@ -1077,7 +1077,7 @@ function finishFlowStep(){
 
   if(currentView === "learn-pro-3"){
     currentView = "learn-pro-4";
-    writingDeck = buildProDecksFrom20Words(cardsOriginal)[3];
+    writingDeck = buildProDecksFrom16Words(cardsOriginal)[3];
     writingIndex = 0;
     writingMistakes = 0;
     writingHelpMode = false;
