@@ -1037,6 +1037,7 @@ function continueFromResume(data){
   }
 
   currentView = data.currentView;
+  currentSessionId = data.currentSessionId || null;
   cardsWords = data.cardsWords || [];
   cardsOriginal = data.cardsOriginal || [];
   cardsHistory = data.cardsHistory || [];
