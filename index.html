@@ -1283,20 +1283,7 @@ else renderProgress(0); // 👈 очистка
 
 /* ================= CARDS ACTIONS ================= */
 
-function flip(){
-  if(!cardsWords.length || cardsAnimating) return;
 
-  if(cardsPendingShow){
-    clearTimeout(cardsPendingShow);
-    cardsPendingShow = null;
-  }
-
-  if(cardsShow){
-    cardsShow = false;
-    renderCards();
-    saveResume();
-    return;
-  }
 
   function flip(){
   if(!cardsWords.length || cardsAnimating) return;
