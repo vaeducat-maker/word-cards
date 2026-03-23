@@ -1409,14 +1409,13 @@ function buildStageTemplate(answer, stage){
   });
 
   const keyboardCount = stage >= 4 ? 15 : 10;
-  const alphabet = getAlphabetForCurrentMode();
-  const unique = [...new Set(chars.filter(ch => !fixedChars.includes(ch)))];
-  const pool = [...unique];
+const answerLetters = chars.filter(ch => !fixedChars.includes(ch));
+const pool = [...answerLetters];
 
-  while(pool.length < keyboardCount){
-    const rnd = alphabet[Math.floor(Math.random()*alphabet.length)];
-    if(!pool.includes(rnd)) pool.push(rnd);
-  }
+while(pool.length < keyboardCount && answerLetters.length){
+  const rnd = answerLetters[Math.floor(Math.random() * answerLetters.length)];
+  pool.push(rnd);
+}
 
   return {
     filled,
