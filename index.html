@@ -938,9 +938,11 @@ function startNewSession(type){
   startTimer();
 
   if(type === "learn"){
-    const learnWords = buildLearnCardsDeck();
-    resetCardsState(learnWords);
-    currentView = "learn-cards";
+  const learnWords = buildLearnCardsDeck();
+  cardsOriginal = [...learnWords];
+
+  resetCardsState(cardsOriginal.slice(0,4));
+  currentView = "learn-cards-1";
     setStatus("Cards");
     showSection("cards");
     renderCards();
