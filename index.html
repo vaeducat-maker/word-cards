@@ -1308,7 +1308,7 @@ function resetCurrentMode(){
   }else if(currentView === "cave-writing-2"){
     writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(10,20), 10, false);
   }else{
-    const proDecks = buildProDecksFrom20Words(cardsOriginal);
+    const proDecks = buildProDecksFrom16Words(cardsOriginal);
     if(currentView && currentView.endsWith("pro-1")) writingDeck = proDecks[0];
     if(currentView && currentView.endsWith("pro-2")) writingDeck = proDecks[1];
     if(currentView && currentView.endsWith("pro-3")) writingDeck = proDecks[2];
