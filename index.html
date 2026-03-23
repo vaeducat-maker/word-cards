@@ -1007,19 +1007,43 @@ function finishSessionByTime(){
 /* ================= FLOW BETWEEN LEVELS ================= */
 
 function finishFlowStep(){
-  if(currentView === "learn-cards"){
-    currentView = "learn-writing-1";
-    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,8), 8, false);
-    writingIndex = 0;
-    writingMistakes = 0;
-    writingHelpMode = false;
-    writingSuccessTarget = "left";
-    setStatus("Writing 1");
-    showSection("writing");
-    renderWriting();
-    saveResume();
-    return;
-  }
+ if(currentView === "learn-cards-1"){
+  resetCardsState(cardsOriginal.slice(4,8));
+  currentView = "learn-cards-2";
+  renderCards();
+  saveResume();
+  return;
+}
+
+if(currentView === "learn-cards-2"){
+  resetCardsState(cardsOriginal.slice(8,12));
+  currentView = "learn-cards-3";
+  renderCards();
+  saveResume();
+  return;
+}
+
+if(currentView === "learn-cards-3"){
+  resetCardsState(cardsOriginal.slice(12,16));
+  currentView = "learn-cards-4";
+  renderCards();
+  saveResume();
+  return;
+}
+
+if(currentView === "learn-cards-4"){
+  currentView = "learn-writing-1";
+  writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,8), 8, false);
+  writingIndex = 0;
+  writingMistakes = 0;
+  writingHelpMode = false;
+  writingSuccessTarget = "left";
+  setStatus("Writing 1");
+  showSection("writing");
+  renderWriting();
+  saveResume();
+  return;
+}
 
   if(currentView === "learn-writing-1"){
     currentView = "learn-writing-2";
