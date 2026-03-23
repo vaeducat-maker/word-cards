@@ -691,10 +691,10 @@ function getValidLearnState(){
   state.currentIds = (state.currentIds || []).filter(id => byId[id]);
   state.reviewIds = (state.reviewIds || []).filter(id => byId[id] && !state.currentIds.includes(id));
 
-  if(state.currentIds.length < 20){
-    state = createInitialLearnState();
-    setLearnState(state);
-  }
+  if(state.currentIds.length < 16){
+  state = createInitialLearnState();
+  setLearnState(state);
+}
 
   return state;
 }
