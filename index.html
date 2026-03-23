@@ -1231,11 +1231,11 @@ if(currentView === "learn-cards-4"){
 
 function renderCards(){
 
-  if(currentView === "learn-cards-1") renderProgress(1);
-  else if(currentView === "learn-cards-2") renderProgress(2);
-  else if(currentView === "learn-cards-3") renderProgress(3);
-  else if(currentView === "learn-cards-4") renderProgress(4);
-  else renderProgress(0); // 👈 очистка
+  if(currentView === "learn-cards-1") renderProgress(0);
+else if(currentView === "learn-cards-2") renderProgress(1);
+else if(currentView === "learn-cards-3") renderProgress(2);
+else if(currentView === "learn-cards-4") renderProgress(3);
+else renderProgress(0); // 👈 очистка
 
   applyColor();
   
