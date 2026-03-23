@@ -628,6 +628,35 @@ function loadResume(){
 function clearResume(){
   localStorage.removeItem(STORAGE_RESUME);
 }
+  function getWordProgressStore(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_WORD_PROGRESS) || "{}");
+  }catch{
+    return {};
+  }
+}
+
+function setWordProgressStore(store){
+  localStorage.setItem(STORAGE_WORD_PROGRESS, JSON.stringify(store));
+}
+
+function getWordProgress(wordId){
+  const store = getWordProgressStore();
+
+  if(!store[wordId]){
+    store[wordId] = {
+      wordId,
+      status: "new",
+      correctDirect: 0,
+      correctReverse: 0,
+      correctWrite: 0,
+      errorCount: 0
+    };
+    setWordProgressStore(store);
+  }
+
+  return store[wordId];
+}
 
 /* ================= WORD DATA ================= */
 
