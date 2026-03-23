@@ -1228,7 +1228,15 @@ if(currentView === "learn-cards-4"){
 /* ================= CARDS RENDER ================= */
 
 function renderCards(){
+
+  if(currentView === "learn-cards-1") renderProgress(1);
+  else if(currentView === "learn-cards-2") renderProgress(2);
+  else if(currentView === "learn-cards-3") renderProgress(3);
+  else if(currentView === "learn-cards-4") renderProgress(4);
+  else renderProgress(0); // 👈 очистка
+
   applyColor();
+  
   setCounter(cardsWords.length);
 
   if(!cardsWords.length){
