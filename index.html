@@ -889,7 +889,7 @@ function buildWritingDeckFromWords(sourceWords, count, usePro = false){
   }));
 }
 
-function buildProDecksFrom20Words(sourceWords){
+function buildProDecksFrom16Words(sourceWords){
   const list = sourceWords.map(w => ({
     id: w.id,
     prompt: w.ru,
@@ -899,10 +899,10 @@ function buildProDecksFrom20Words(sourceWords){
   }));
 
   return [
-    list.slice(0,5),
-    list.slice(5,10),
-    list.slice(10,15),
-    list.slice(15,20)
+    list.slice(0,4),
+    list.slice(4,8),
+    list.slice(8,12),
+    list.slice(12,16)
   ];
 }
 
