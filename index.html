@@ -522,6 +522,15 @@ function applyColor(){
   ui.card.style.background = color;
   ui.writeCard.style.background = color;
 }
+  function renderProgress(current){
+  let str = "";
+
+  for(let i = 0; i < 4; i++){
+    str += i < current ? "🐾" : "▫";
+  }
+
+  document.getElementById("progress").innerText = str;
+}
 
 /* ================= HELPERS: CONFETTI ================= */
 
