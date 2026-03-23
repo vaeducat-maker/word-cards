@@ -666,7 +666,7 @@ function getWordProgress(wordId){
 
   return store[wordId];
 }
-function updateWordProgress(wordId, patch){
+ function updateWordProgress(wordId, patch){
   const store = getWordProgressStore();
   const current = getWordProgress(wordId);
 
@@ -677,7 +677,16 @@ function updateWordProgress(wordId, patch){
 
   setWordProgressStore(store);
 }
-  
+
+function hasWordPassedDirectThisSession(wordId){
+  const progress = getWordProgress(wordId);
+  return progress.directSessionId === currentSessionId;
+}
+
+function hasWordPassedWriteThisSession(wordId){
+  const progress = getWordProgress(wordId);
+  return progress.writeSessionId === currentSessionId;
+}
 /* ================= WORD DATA ================= */
 
 function makeStableId(rawId, rowIndex){
