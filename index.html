@@ -981,16 +981,21 @@ function startNewSession(type){
 
   if(type === "learn"){
   const learnWords = buildLearnCardsDeck();
+
+  learnWords.forEach(word => {
+    getWordProgress(word.id);
+  });
+
   cardsOriginal = [...learnWords];
 
   resetCardsState(cardsOriginal.slice(0,4));
   currentView = "learn-cards-1";
-    setStatus("Cards");
-    showSection("cards");
-    renderCards();
-    saveResume();
-    return;
-  }
+  setStatus("Cards");
+  showSection("cards");
+  renderCards();
+  saveResume();
+  return;
+}
 
   if(type === "cave"){
     const caveWords = buildCaveCardsDeck();
