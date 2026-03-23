@@ -652,11 +652,17 @@ function getWordProgress(wordId){
       correctDirect: 0,
       correctReverse: 0,
       correctWrite: 0,
-      errorCount: 0
-      lastSessionId: null
+      errorCount: 0,
+      directSessionId: null,
+      reverseSessionId: null,
+      writeSessionId: null
     };
     setWordProgressStore(store);
   }
+
+  if(store[wordId].directSessionId === undefined) store[wordId].directSessionId = null;
+  if(store[wordId].reverseSessionId === undefined) store[wordId].reverseSessionId = null;
+  if(store[wordId].writeSessionId === undefined) store[wordId].writeSessionId = null;
 
   return store[wordId];
 }
