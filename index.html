@@ -687,6 +687,12 @@ function hasWordPassedWriteThisSession(wordId){
   const progress = getWordProgress(wordId);
   return progress.writeSessionId === currentSessionId;
 }
+  function isWordSessionPassed(wordId){
+  return (
+    hasWordPassedDirectThisSession(wordId) &&
+    hasWordPassedWriteThisSession(wordId)
+  );
+}
 /* ================= WORD DATA ================= */
 
 function makeStableId(rawId, rowIndex){
