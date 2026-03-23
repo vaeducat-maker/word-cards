@@ -602,6 +602,7 @@ function saveResume(){
   const data = {
     currentMode,
     currentView,
+    currentSessionId,
     sessionLeftMs: Math.max(0, sessionEnd ? sessionEnd - Date.now() : 0),
     cardsWords,
     cardsOriginal,
