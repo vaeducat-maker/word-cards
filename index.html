@@ -515,6 +515,8 @@ function showSection(section){
   }else if(section === "done"){
     ui.doneBox.classList.remove("hidden");
   }
+  document.getElementById("progress").style.display =
+    section === "cards" ? "block" : "none";
 }
 
 function applyColor(){
