@@ -337,17 +337,25 @@ button{
 
    <div id="swipeHint" style="
   position:absolute;
-  right:18px;
-  bottom:18px;
-  display:flex;
-  align-items:center;
-  gap:8px;
+  bottom:0;
+  left:0;
+  height:100%;
+  width:40%;
+  background:linear-gradient(to right, rgba(255,255,255,0), rgba(0,0,0,0.06));
+  animation: swipeZone 1.2s infinite;
   pointer-events:none;
-  animation: swipeHintMove 1s infinite;
+"></div>
+
+<div style="
+  position:absolute;
+  right:16px;
+  bottom:16px;
+  font-size:48px;
+  color:#111827;
+  animation: swipeArrow 1.2s infinite;
+  pointer-events:none;
 ">
-  <span style="font-size:18px; color:#94a3b8;">●</span>
-  <span style="font-size:24px; color:#64748b;">●</span>
-  <span style="font-size:34px; color:#1f2937; font-weight:700;">➜</span>
+  ➜
 </div>
   </div>
   
