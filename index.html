@@ -1952,9 +1952,13 @@ ui.card.addEventListener("touchend", e => {
 
   if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
 
-  if(dx < 0) remember();
-  else notRemember();
-}, { passive: true });
+  if(dx < 0){
+  // ничего не делаем
+}else{
+  remember();
+}
+}, 
+                         { passive: true });
 
 /* ================= START ================= */
 
