@@ -336,15 +336,19 @@ button{
     <div id="word" class="word">loading...</div>
     <div id="translation" class="translation">?</div>
 
-   <div style="
+   <div id="swipeHint" style="
   position:absolute;
-  right:16px;
-  bottom:16px;
-  font-size:42px;
-  opacity:0.8;
-  animation: swipeHint 1.2s infinite;
+  right:18px;
+  bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  pointer-events:none;
+  animation: swipeHintMove 1s infinite;
 ">
-  →
+  <span style="font-size:18px; color:#94a3b8;">●</span>
+  <span style="font-size:24px; color:#64748b;">●</span>
+  <span style="font-size:34px; color:#1f2937; font-weight:700;">➜</span>
 </div>
   </div>
   
