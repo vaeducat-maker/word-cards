@@ -1355,16 +1355,8 @@ function remember(){
   animateCards("left", () => {
     pushCardsSnapshot();
 
-    const word = cardsWords[cardsIndex];
-    const progress = getWordProgress(word.id);
-
-    if(progress.directSessionId !== currentSessionId){
-      updateWordProgress(word.id, {
-        correctDirect: progress.correctDirect + 1,
-        status: "learning",
-        directSessionId: currentSessionId
-      });
-    }
+    
+    
 
     cardsWords.splice(cardsIndex, 1);
     if(cardsIndex >= cardsWords.length) cardsIndex = 0;
