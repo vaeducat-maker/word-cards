@@ -565,6 +565,7 @@ function showSection(section){
   ui.writingView.classList.add("hidden");
   ui.doneBox.classList.add("hidden");
   ui.counter.classList.add("hidden");
+ ui.matchView.classList.add("hidden");
 
   if(section === "menu"){
     ui.mainMenu.classList.remove("hidden");
@@ -576,7 +577,9 @@ function showSection(section){
     ui.counter.classList.remove("hidden");
   }else if(section === "done"){
     ui.doneBox.classList.remove("hidden");
-  }
+  }else if(section === "match"){
+  ui.matchView.classList.remove("hidden");
+}
   document.getElementById("progress").style.display =
     section === "cards" ? "block" : "none";
 }
