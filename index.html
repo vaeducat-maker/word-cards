@@ -1226,10 +1226,7 @@ function finishSessionByTime(){
 
 function finishFlowStep(){
  if(currentView === "learn-cards-1"){
-  resetCardsState(cardsOriginal.slice(4,8));
-  currentView = "learn-cards-2";
-  renderCards();
-  saveResume();
+  startMatchGame(cardsOriginal.slice(0,4));
   return;
 }
 
