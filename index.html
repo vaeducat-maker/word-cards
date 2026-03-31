@@ -1400,6 +1400,10 @@ function animateCards(direction, callback){
 }
 
 function remember(){
+ if(cardsPendingShow){
+  clearTimeout(cardsPendingShow);
+  cardsPendingShow = null;
+}
   if(!cardsWords.length) return;
 
   animateCards("left", () => {
