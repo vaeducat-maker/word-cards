@@ -1392,11 +1392,7 @@ cardsPendingShow = setTimeout(() => {
 
 
   function flip(){
-  if(!cardsWords.length || cardsAnimating) return;
-
-  cardsShow = !cardsShow;
-  renderCards();
-  saveResume();
+  return;
 }
 
 function animateCards(direction, callback){
