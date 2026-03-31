@@ -1037,6 +1037,26 @@ function bumpWritingStage(wordId){
   store[currentMode][wordId] = Math.min(4, cur + 1);
   setWritingStageStore(store);
 }
+ function renderMatch(){
+  const grid = document.getElementById("matchGrid");
+  grid.innerHTML = "";
+
+  matchCards.forEach((card, index) => {
+    const div = document.createElement("div");
+    div.className = "match-card";
+    div.innerText = card.text;
+
+    if(card._removed){
+      div.style.visibility = "hidden";
+    }
+
+    if(matchSelected.includes(index)){
+      div.classList.add("selected");
+    }
+
+    grid.appendChild(div);
+  });
+}
 
 /* ================= WRITING HELPERS ================= */
 
