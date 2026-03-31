@@ -1057,7 +1057,32 @@ function bumpWritingStage(wordId){
     grid.appendChild(div);
   });
 }
+function startMatchGame(words){
+  matchCards = [];
 
+  words.forEach(w => {
+    matchCards.push({
+      id: w.id,
+      text: w.word,
+      type: "ru"
+    });
+
+    matchCards.push({
+      id: w.id,
+      text: w.translation,
+      type: "et"
+    });
+  });
+
+  matchCards.sort(() => Math.random() - 0.5);
+
+  matchSelected = [];
+  matchPairsLeft = words.length;
+
+  currentView = "match";
+  showSection("match");
+  renderMatch();
+}
 /* ================= WRITING HELPERS ================= */
 
 function getPrimaryForm(fullWord){
