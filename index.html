@@ -1356,7 +1356,21 @@ else renderProgress(0); // 👈 очистка
 
   const w = cardsWords[cardsIndex];
   ui.word.innerText = w.word;
-  ui.translation.innerText = cardsShow ? w.translation : "?";
+  // очистить старый показ
+ui.translation.classList.remove("show");
+ui.translation.innerText = "";
+
+// убрать старый таймер
+if(cardsPendingShow){
+  clearTimeout(cardsPendingShow);
+}
+
+// показать эстонское слово через 600 мс
+cardsPendingShow = setTimeout(() => {
+  ui.translation.innerText = w.translation;
+  ui.translation.classList.add("show");
+  cardsPendingShow = null;
+}, 600);
 }
 
 /* ================= CARDS ACTIONS ================= */
