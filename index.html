@@ -332,7 +332,30 @@ button{
   opacity:.9;
   animation:confetti-fall 1.8s linear forwards;
 }
+.match-card{
+  padding:18px;
+  border-radius:16px;
+  background:white;
+  box-shadow:0 6px 14px rgba(0,0,0,0.12);
+  font-size:20px;
+  font-weight:700;
+  color:#1f2937;
+  cursor:pointer;
+  user-select:none;
+}
 
+.match-card.selected{
+  background:#dbeafe;
+}
+
+.match-card.correct{
+  background:#bbf7d0;
+}
+
+.match-card.wrong{
+  background:#fecaca;
+  animation:shake .25s;
+}
 @keyframes confetti-fall{
   0%{transform:translateY(0) rotate(0deg);opacity:1;}
   100%{transform:translateY(110vh) rotate(540deg);opacity:0;}
