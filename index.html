@@ -1507,8 +1507,9 @@ function resetCurrentMode(){
 }
 
 function speakAnswer(){
-  if(!cardsShow || !cardsWords.length) return;
-  const text = cardsWords[cardsIndex].translation;
+  if(!cardsWords.length) return;
+
+  const text = ui.translation.innerText.trim();
   if(!text) return;
 
   const u = new SpeechSynthesisUtterance(text);
