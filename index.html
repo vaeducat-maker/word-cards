@@ -1053,6 +1053,13 @@ function bumpWritingStage(wordId){
     if(matchSelected.includes(index)){
       div.classList.add("selected");
     }
+   if(card._state === "correct"){
+  div.classList.add("correct");
+}
+
+if(card._state === "wrong"){
+  div.classList.add("wrong");
+}
    
 div.onclick = () => selectMatchCard(index);
    
