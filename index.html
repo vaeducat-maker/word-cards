@@ -1059,15 +1059,12 @@ function bumpWritingStage(wordId){
       div.style.visibility = "hidden";
     }
 
-    if(matchSelected.includes(index)){
-      div.classList.add("selected");
-    }
    if(card._state === "correct"){
   div.classList.add("correct");
-}
-
-if(card._state === "wrong"){
+}else if(card._state === "wrong"){
   div.classList.add("wrong");
+}else if(matchSelected.includes(index)){
+  div.classList.add("selected");
 }
    
 div.onclick = () => selectMatchCard(index);
