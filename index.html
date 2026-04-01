@@ -1152,7 +1152,33 @@ function startMatchGame(words){
     }
   }
 }
-/* ================= WRITING HELPERS ================= */
+
+ function splitWordToParts(word){
+  const cleanWord = String(word || "").trim();
+  const chars = cleanWord.split("");
+
+  if(chars.length <= 3){
+    return chars;
+  }
+
+  const partCount = 4;
+  const baseSize = Math.floor(chars.length / partCount);
+  const extra = chars.length % partCount;
+
+  const parts = [];
+  let start = 0;
+
+  for(let i = 0; i < partCount; i++){
+    const add = i < extra ? 1 : 0;
+    const size = baseSize + add;
+    const part = chars.slice(start, start + size).join("");
+    parts.push(part);
+    start += size;
+  }
+
+  return parts.filter(Boolean);
+}
+ /* ================= WRITING HELPERS ================= */
 
 function getPrimaryForm(fullWord){
   return String(fullWord || "").trim();
