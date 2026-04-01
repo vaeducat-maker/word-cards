@@ -1085,6 +1085,15 @@ function startMatchGame(words){
   showSection("match");
   renderMatch();
 }
+ function selectMatchCard(index){
+  const card = matchCards[index];
+  if(card._removed) return;
+
+  if(matchSelected.includes(index)) return;
+
+  matchSelected.push(index);
+  renderMatch();
+}
 /* ================= WRITING HELPERS ================= */
 
 function getPrimaryForm(fullWord){
