@@ -1093,6 +1093,46 @@ function startMatchGame(words){
 
   matchSelected.push(index);
   renderMatch();
+
+  if(matchSelected.length === 2){
+    const i1 = matchSelected[0];
+    const i2 = matchSelected[1];
+
+    const c1 = matchCards[i1];
+    const c2 = matchCards[i2];
+
+    const isCorrect =
+      c1.id === c2.id &&
+      c1.type !== c2.type;
+
+    if(isCorrect){
+      c1._state = "correct";
+      c2._state = "correct";
+      renderMatch();
+
+      setTimeout(() => {
+        c1._removed = true;
+        c2._removed = true;
+        c1._state = "";
+        c2._state = "";
+        matchSelected = [];
+        matchPairsLeft -= 1;
+        renderMatch();
+      }, 500);
+
+    }else{
+      c1._state = "wrong";
+      c2._state = "wrong";
+      renderMatch();
+
+      setTimeout(() => {
+        c1._state = "";
+        c2._state = "";
+        matchSelected = [];
+        renderMatch();
+      }, 600);
+    }
+  }
 }
 /* ================= WRITING HELPERS ================= */
 
