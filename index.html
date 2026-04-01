@@ -1053,7 +1053,9 @@ function bumpWritingStage(wordId){
     if(matchSelected.includes(index)){
       div.classList.add("selected");
     }
-
+   
+div.onclick = () => selectMatchCard(index);
+   
     grid.appendChild(div);
   });
 }
