@@ -1169,6 +1169,45 @@ function startBuildGame(words){
   currentView = "build";
   showSection("build");
 }
+ function selectBuildPart(index, btn){
+  const part = buildParts[index];
+  const correctPart = buildCorrectParts[buildCurrent.length];
+
+  if(part === correctPart){
+    buildCurrent.push(part);
+    ui.buildResult.innerText = buildCurrent.join("");
+
+    btn.classList.add("correct");
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.style.visibility = "hidden";
+    }, 250);
+
+    if(buildCurrent.length === buildCorrectParts.length){
+      setTimeout(() => {
+        buildIndex += 1;
+
+        if(buildIndex < buildWords.length){
+          showBuildWord();
+        }else{
+          resetCardsState(cardsOriginal.slice(4,8));
+          currentView = "learn-cards-2";
+          showSection("cards");
+          renderCards();
+          saveResume();
+        }
+      }, 400);
+    }
+
+  }else{
+    btn.classList.add("wrong");
+
+    setTimeout(() => {
+      btn.classList.remove("wrong");
+    }, 350);
+  }
+}
  function selectMatchCard(index){
   const card = matchCards[index];
   if(card._removed) return;
