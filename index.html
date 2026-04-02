@@ -658,6 +658,9 @@ function showSection(section){
   }else if(section === "match"){
   ui.matchView.classList.remove("hidden");
 }
+ }else if(section === "build"){
+  ui.buildView.classList.remove("hidden");
+}
   document.getElementById("progress").style.display =
     section === "cards" ? "block" : "none";
 }
