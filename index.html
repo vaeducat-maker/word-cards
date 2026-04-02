@@ -1222,6 +1222,9 @@ function startMatchGame(words){
 
   return parts.filter(Boolean);
 }
+ function shuffleArray(arr){
+  return [...arr].sort(() => Math.random() - 0.5);
+}
  /* ================= WRITING HELPERS ================= */
 
 function getPrimaryForm(fullWord){
