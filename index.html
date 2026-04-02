@@ -1198,7 +1198,13 @@ function startBuildGame(words){
         c2._state = "";
         matchSelected = [];
         matchPairsLeft -= 1;
-        renderMatch();
+renderMatch();
+
+if(matchPairsLeft === 0){
+  setTimeout(() => {
+    startBuildGame(cardsOriginal.slice(0,4));
+  }, 400);
+}
       }, 500);
 
     }else{
