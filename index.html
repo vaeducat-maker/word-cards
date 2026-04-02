@@ -1156,12 +1156,15 @@ function startBuildGame(words){
   ui.buildResult.innerText = "";
   ui.buildParts.innerHTML = "";
 
-  buildParts.forEach(part => {
-    const btn = document.createElement("button");
-    btn.className = "match-card";
-    btn.innerText = part;
-    ui.buildParts.appendChild(btn);
-  });
+  buildParts.forEach((part, index) => {
+  const btn = document.createElement("button");
+  btn.className = "match-card";
+  btn.innerText = part;
+
+  btn.onclick = () => selectBuildPart(index, btn);
+
+  ui.buildParts.appendChild(btn);
+});
 
   currentView = "build";
   showSection("build");
