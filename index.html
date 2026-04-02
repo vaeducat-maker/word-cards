@@ -1439,14 +1439,7 @@ function finishFlowStep(){
   return;
 }
  
- if(currentView === "build"){
-  resetCardsState(cardsOriginal.slice(4,8));
-  currentView = "learn-cards-2";
-  showSection("cards");
-  renderCards();
-  saveResume();
-  return;
-}
+ 
 
 if(currentView === "learn-cards-2"){
   startMatchGame(cardsOriginal.slice(4,8));
