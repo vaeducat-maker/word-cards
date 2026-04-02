@@ -1195,12 +1195,21 @@ function startBuildGame(words){
         if(buildIndex < buildWords.length){
           showBuildWord();
         }else{
-          resetCardsState(cardsOriginal.slice(4,8));
-          currentView = "learn-cards-2";
-          showSection("cards");
-          renderCards();
-          saveResume();
-        }
+  if(matchStage === "learn-cards-1"){
+    resetCardsState(cardsOriginal.slice(4,8));
+    currentView = "learn-cards-2";
+  }else if(matchStage === "learn-cards-2"){
+    resetCardsState(cardsOriginal.slice(8,12));
+    currentView = "learn-cards-3";
+  }else if(matchStage === "learn-cards-3"){
+    resetCardsState(cardsOriginal.slice(12,16));
+    currentView = "learn-cards-4";
+  }
+
+  showSection("cards");
+  renderCards();
+  saveResume();
+}
       }, 400);
     }
 
