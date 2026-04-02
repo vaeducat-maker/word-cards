@@ -1143,9 +1143,10 @@ function startMatchGame(words, stage){
   showSection("match");
   renderMatch();
 }
-function startBuildGame(words){
+function startBuildGame(words, stage){
   buildWords = words;
   buildIndex = 0;
+  matchStage = stage; // ВОТ ЭТО ВАЖНО
   showBuildWord();
 }
  function showBuildWord(){
