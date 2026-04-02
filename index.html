@@ -1115,6 +1115,7 @@ div.onclick = () => selectMatchCard(index);
   });
 }
 function startMatchGame(words){
+ matchSourceWords = [...words];
   matchCards = [];
 
   words.forEach(w => {
