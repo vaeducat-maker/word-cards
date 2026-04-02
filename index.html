@@ -1440,10 +1440,7 @@ function finishFlowStep(){
 }
 
 if(currentView === "learn-cards-2"){
-  resetCardsState(cardsOriginal.slice(8,12));
-  currentView = "learn-cards-3";
-  renderCards();
-  saveResume();
+  startMatchGame(cardsOriginal.slice(4,8));
   return;
 }
 
