@@ -1439,14 +1439,13 @@ function finishSessionByTime(){
 
 function finishFlowStep(){
  if(currentView === "learn-cards-1"){
-  startMatchGame(cardsOriginal.slice(0,4));
+  startMatchGame(cardsOriginal.slice(0,4), "learn-cards-1");
   return;
 }
  
- 
 
 if(currentView === "learn-cards-2"){
-  startMatchGame(cardsOriginal.slice(4,8));
+  startMatchGame(cardsOriginal.slice(4,8), "learn-cards-2");
   return;
 }
 
