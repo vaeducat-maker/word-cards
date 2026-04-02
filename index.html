@@ -1195,49 +1195,49 @@ function startBuildGame(words, stage){
 
         if(buildIndex < buildWords.length){
           showBuildWord();
-        }else{
- }else{
-  if(matchStage === "learn-cards-1"){
-    resetCardsState(cardsOriginal.slice(4,8));
-    currentView = "learn-cards-2";
-    showSection("cards");
-    renderCards();
-    saveResume();
-    return;
-  }
+          return;
+        }
 
-  if(matchStage === "learn-cards-2"){
-    resetCardsState(cardsOriginal.slice(8,12));
-    currentView = "learn-cards-3";
-    showSection("cards");
-    renderCards();
-    saveResume();
-    return;
-  }
+        if(matchStage === "learn-cards-1"){
+          resetCardsState(cardsOriginal.slice(4,8));
+          currentView = "learn-cards-2";
+          showSection("cards");
+          renderCards();
+          saveResume();
+          return;
+        }
 
-  if(matchStage === "learn-cards-3"){
-    resetCardsState(cardsOriginal.slice(12,16));
-    currentView = "learn-cards-4";
-    showSection("cards");
-    renderCards();
-    saveResume();
-    return;
-  }
+        if(matchStage === "learn-cards-2"){
+          resetCardsState(cardsOriginal.slice(8,12));
+          currentView = "learn-cards-3";
+          showSection("cards");
+          renderCards();
+          saveResume();
+          return;
+        }
 
-  if(matchStage === "learn-cards-4"){
-    currentView = "learn-writing-1";
-    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,8), 8, false);
-    writingIndex = 0;
-    writingMistakes = 0;
-    writingHelpMode = false;
-    writingSuccessTarget = "left";
-    setStatus("Writing 1");
-    showSection("writing");
-    renderWriting();
-    saveResume();
-    return;
-  }
-}
+        if(matchStage === "learn-cards-3"){
+          resetCardsState(cardsOriginal.slice(12,16));
+          currentView = "learn-cards-4";
+          showSection("cards");
+          renderCards();
+          saveResume();
+          return;
+        }
+
+        if(matchStage === "learn-cards-4"){
+          currentView = "learn-writing-1";
+          writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,8), 8, false);
+          writingIndex = 0;
+          writingMistakes = 0;
+          writingHelpMode = false;
+          writingSuccessTarget = "left";
+          setStatus("Writing 1");
+          showSection("writing");
+          renderWriting();
+          saveResume();
+          return;
+        }
       }, 400);
     }
 
@@ -1249,6 +1249,7 @@ function startBuildGame(words, stage){
     }, 350);
   }
 }
+ 
  function selectMatchCard(index){
   const card = matchCards[index];
   if(card._removed) return;
