@@ -1147,6 +1147,33 @@ function startMatchGame(words){
   showSection("match");
   renderMatch();
 }
+function startBuildGame(words){
+  buildWords = words;
+  buildIndex = 0;
+  showBuildWord();
+}
+ function showBuildWord(){
+  const item = buildWords[buildIndex];
+  if(!item) return;
+
+  buildCorrectParts = splitWordToParts(item.translation);
+  buildParts = shuffleArray(buildCorrectParts);
+  buildCurrent = [];
+
+  ui.buildPrompt.innerText = item.word;
+  ui.buildResult.innerText = "";
+  ui.buildParts.innerHTML = "";
+
+  buildParts.forEach(part => {
+    const btn = document.createElement("button");
+    btn.className = "match-card";
+    btn.innerText = part;
+    ui.buildParts.appendChild(btn);
+  });
+
+  currentView = "build";
+  showSection("build");
+}
  function selectMatchCard(index){
   const card = matchCards[index];
   if(card._removed) return;
