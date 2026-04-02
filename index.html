@@ -1460,24 +1460,12 @@ if(currentView === "learn-cards-2"){
 }
 
 if(currentView === "learn-cards-3"){
-  resetCardsState(cardsOriginal.slice(12,16));
-  currentView = "learn-cards-4";
-  renderCards();
-  saveResume();
+  startMatchGame(cardsOriginal.slice(8,12), "learn-cards-3");
   return;
 }
 
 if(currentView === "learn-cards-4"){
-  currentView = "learn-writing-1";
-  writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(0,8), 8, false);
-  writingIndex = 0;
-  writingMistakes = 0;
-  writingHelpMode = false;
-  writingSuccessTarget = "left";
-  setStatus("Writing 1");
-  showSection("writing");
-  renderWriting();
-  saveResume();
+  startMatchGame(cardsOriginal.slice(12,16), "learn-cards-4");
   return;
 }
 
