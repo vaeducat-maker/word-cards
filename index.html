@@ -1248,6 +1248,33 @@ function startMatchGame(words, stage){
     }
   });
 }
+ function selectChoice(selected, btn){
+  const correct = choiceCurrent.translation;
+
+  if(selected === correct){
+    btn.classList.add("correct");
+
+    setTimeout(() => {
+      choiceWords.shift();
+      showNextChoice();
+    }, 400);
+
+  }else{
+    btn.classList.add("wrong");
+
+    [...ui.choiceTop.children, ...ui.choiceBottom.children].forEach(b => {
+      if(b.innerText === correct){
+        b.classList.add("correct");
+      }
+    });
+
+    setTimeout(() => {
+      const failedWord = choiceWords.shift();
+      choiceWords.push(failedWord);
+      showNextChoice();
+    }, 700);
+  }
+}
 function startBuildGame(words, stage){
   buildWords = words;
   buildIndex = 0;
