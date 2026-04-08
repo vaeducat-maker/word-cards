@@ -1222,6 +1222,32 @@ function startMatchGame(words, stage){
   currentView = "choice";
   showSection("choice");
 }
+ function renderChoice(options){
+  ui.choiceTop.innerHTML = "";
+  ui.choiceBottom.innerHTML = "";
+
+  options.forEach((text, index) => {
+    const btn = document.createElement("button");
+    btn.className = "match-card";
+    btn.innerText = text;
+
+    btn.onclick = () => selectChoice(text, btn);
+
+    if(options.length === 2){
+      if(index === 0){
+        ui.choiceTop.appendChild(btn);
+      }else{
+        ui.choiceBottom.appendChild(btn);
+      }
+    }else{
+      if(index < 2){
+        ui.choiceTop.appendChild(btn);
+      }else{
+        ui.choiceBottom.appendChild(btn);
+      }
+    }
+  });
+}
 function startBuildGame(words, stage){
   buildWords = words;
   buildIndex = 0;
