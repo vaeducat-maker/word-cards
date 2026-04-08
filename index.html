@@ -1188,6 +1188,40 @@ function startMatchGame(words, stage){
   choiceMode = "easy";
   showNextChoice();
 }
+ function showNextChoice(){
+  if(!choiceWords.length){
+    if(choiceMode === "easy"){
+      choiceMode = "hard";
+      choiceWords = [...matchSourceWords];
+      showNextChoice();
+      return;
+    }
+
+    startBuildGame(matchSourceWords, matchStage);
+    return;
+  }
+
+  choiceCurrent = choiceWords[0];
+  ui.choicePrompt.innerText = choiceCurrent.word;
+
+  let options = [];
+
+  if(choiceMode === "easy"){
+    const wrong = choiceWords
+      .filter(w => w.id !== choiceCurrent.id)
+      .sort(() => Math.random() - 0.5)[0];
+
+    options = [choiceCurrent.translation, wrong.translation];
+  }else{
+    options = matchSourceWords.map(w => w.translation);
+  }
+
+  options = options.sort(() => Math.random() - 0.5);
+
+  renderChoice(options);
+  currentView = "choice";
+  showSection("choice");
+}
 function startBuildGame(words, stage){
   buildWords = words;
   buildIndex = 0;
