@@ -1214,14 +1214,14 @@ function startMatchGame(words, stage){
   let options = [];
 
   if(choiceMode === "easy"){
-    const wrong = choiceWords
-      .filter(w => w.id !== choiceCurrent.id)
-      .sort(() => Math.random() - 0.5)[0];
+  const wrong = matchSourceWords
+    .filter(w => w.id !== choiceCurrent.id)
+    .sort(() => Math.random() - 0.5)[0];
 
-    options = [choiceCurrent.translation, wrong.translation];
-  }else{
-    options = matchSourceWords.map(w => w.translation);
-  }
+  options = [choiceCurrent.translation, wrong.translation];
+}else{
+  options = matchSourceWords.map(w => w.translation);
+}
 
   options = options.sort(() => Math.random() - 0.5);
 
