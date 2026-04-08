@@ -1182,6 +1182,12 @@ function startMatchGame(words, stage){
   showSection("match");
   renderMatch();
 }
+ function startChoiceGame(words, stage){
+  choiceWords = [...words];
+  matchStage = stage;
+  choiceMode = "easy";
+  showNextChoice();
+}
 function startBuildGame(words, stage){
   buildWords = words;
   buildIndex = 0;
