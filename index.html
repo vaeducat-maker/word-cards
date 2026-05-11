@@ -1937,10 +1937,14 @@ if(currentView === "learn-cards-4"){
   return;
 }
 
-  if(currentView === "learn-writing-1"){
-  setStatus("Choose translation");
-  startCloudChoiceGame(cardsOriginal.slice(0,8), "after-writing-1");
+ if(currentView === "learn-writing-1"){
+
+  createMixedTasks(cardsOriginal.slice(0,8));
+
+  runNextMixedTask();
+
   saveResume();
+
   return;
 }
 
