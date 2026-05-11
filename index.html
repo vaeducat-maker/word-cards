@@ -2381,10 +2381,14 @@ function renderWriting(){
   }
 
   if(writingIndex >= writingDeck.length){
-    finishFlowStep();
+  if(currentView === "mixed-writing"){
+    runNextMixedTask();
     return;
   }
 
+  finishFlowStep();
+  return;
+}
   const item = writingDeck[writingIndex];
   const stage = item.stage;
   const tpl = buildStageTemplate(item.answer, stage);
