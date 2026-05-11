@@ -1362,6 +1362,7 @@ function startMatchGame(words, stage){
 }
 function startCloudChoiceGame(words, stage){
   cloudWords = [...words];
+  matchSourceWords = [...words];
   cloudStage = stage;
   currentView = "cloud-choice";
   showSection("choice");
