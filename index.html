@@ -2649,22 +2649,32 @@ function handleWritingSuccess(direction){
 }
 
   if(direction === "right"){
-    animateWriting("right", () => {
-      const w = writingDeck.splice(writingIndex, 1)[0];
-      const returnAfter = 2 + Math.floor(Math.random() * 3);
-      let newIndex = writingIndex + returnAfter;
-
-      if(newIndex > writingDeck.length) newIndex = writingDeck.length;
-      writingDeck.splice(newIndex, 0, w);
-
+  animateWriting("right", () => {
+    if(currentView === "mixed-writing"){
+      writingDeck.splice(writingIndex, 1);
       writingMistakes = 0;
       writingHelpMode = false;
       writingSuccessTarget = "left";
-      renderWriting();
+      runNextMixedTask();
       saveResume();
-    });
-    return;
-  }
+      return;
+    }
+
+    const w = writingDeck.splice(writingIndex, 1)[0];
+    const returnAfter = 2 + Math.floor(Math.random() * 3);
+    let newIndex = writingIndex + returnAfter;
+
+    if(newIndex > writingDeck.length) newIndex = writingDeck.length;
+    writingDeck.splice(newIndex, 0, w);
+
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    renderWriting();
+    saveResume();
+  });
+  return;
+}
 
   animateWriting("left", () => {
     writingDeck.splice(writingIndex, 1);
