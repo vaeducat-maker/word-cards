@@ -1426,33 +1426,42 @@ function showNextCloudChoice(){
 }
 
 function renderCloudOptions(options){
-  const positions = [
-    { left:"38%", top:"58px" },
-    { left:"8%", top:"112px" },
-    { right:"8%", top:"112px" },
-    { left:"5%", top:"230px" },
-    { right:"5%", top:"230px" },
-    { left:"18%", bottom:"56px" },
-    { right:"18%", bottom:"56px" },
-    { left:"38%", bottom:"14px" }
-  ];
+
+  const safePositions = shuffleArray([
+    { left:"8%", top:"14%" },
+    { left:"38%", top:"8%" },
+    { right:"8%", top:"14%" },
+
+    { left:"2%", top:"42%" },
+    { right:"2%", top:"42%" },
+
+    { left:"8%", bottom:"14%" },
+    { left:"38%", bottom:"8%" },
+    { right:"8%", bottom:"14%" }
+  ]);
 
   options.forEach((text, index) => {
+
     const btn = document.createElement("button");
     btn.className = "cloud-option";
     btn.innerText = text;
 
-    const pos = positions[index];
+    const pos = safePositions[index];
+
     Object.keys(pos).forEach(key => {
       btn.style[key] = pos[key];
     });
+
+    btn.style.maxWidth = "120px";
+    btn.style.whiteSpace = "normal";
+    btn.style.lineHeight = "1.15";
 
     btn.onclick = () => selectCloudOption(text, btn);
 
     ui.cloudOptions.appendChild(btn);
   });
 }
-
+  
 function selectCloudOption(selected, btn){
   const correct = cloudCurrent.word;
 
