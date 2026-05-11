@@ -6,7 +6,88 @@
 <title>Word Cards</title>
 
 <!-- ================= CSS ================= -->
-<style>
+.cloud-card{
+  max-width:420px;
+  height:420px;
+  margin:18px auto;
+  position:relative;
+  border-radius:24px;
+  background:#f8fbff;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+  overflow:hidden;
+}
+
+.cloud-task{
+  position:absolute;
+  top:14px;
+  left:0;
+  right:0;
+  font-size:14px;
+  font-weight:700;
+  color:#94a3b8;
+}
+
+.cloud-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  padding:16px 22px;
+  border-radius:20px;
+  background:#dbeafe;
+  color:#2563eb;
+  font-size:38px;
+  font-weight:900;
+  box-shadow:0 6px 16px rgba(37,99,235,0.18);
+  z-index:2;
+}
+
+.cloud-option{
+  position:absolute;
+  min-width:92px;
+  padding:11px 14px;
+  border-radius:16px;
+  background:white;
+  color:#1f2937;
+  font-size:17px;
+  font-weight:800;
+  box-shadow:0 5px 12px rgba(0,0,0,0.12);
+}
+
+.cloud-option.correct{
+  background:#bbf7d0 !important;
+}
+
+.cloud-option.wrong{
+  background:#fecaca !important;
+  color:#991b1b !important;
+  animation:shake .25s;
+}
+
+.cloud-answer{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:#fff7f7;
+  z-index:5;
+}
+
+.cloud-answer-et{
+  font-size:54px;
+  font-weight:900;
+  color:#2563eb;
+}
+
+.cloud-answer-ru{
+  font-size:34px;
+  font-weight:900;
+  color:#b91c1c;
+}
+ <style>
  @keyframes swipeHintMove {
   0% { transform: translateX(0); opacity: 0.55; }
   50% { transform: translateX(18px); opacity: 1; }
