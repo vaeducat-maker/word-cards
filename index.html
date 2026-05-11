@@ -1456,35 +1456,13 @@ function showNextCloudChoice(){
 }
 
 function renderCloudOptions(options){
-
-  const safePositions = shuffleArray([
-    { left:"8%", top:"14%" },
-    { left:"38%", top:"8%" },
-    { right:"8%", top:"14%" },
-
-    { left:"2%", top:"42%" },
-    { right:"2%", top:"42%" },
-
-    { left:"8%", bottom:"14%" },
-    { left:"38%", bottom:"8%" },
-    { right:"8%", bottom:"14%" }
-  ]);
+  const areas = shuffleArray(["a","b","c","d","e","f","g","h"]);
 
   options.forEach((text, index) => {
-
     const btn = document.createElement("button");
     btn.className = "cloud-option";
     btn.innerText = text;
-
-    const pos = safePositions[index];
-
-    Object.keys(pos).forEach(key => {
-      btn.style[key] = pos[key];
-    });
-
-    btn.style.maxWidth = "120px";
-    btn.style.whiteSpace = "normal";
-    btn.style.lineHeight = "1.15";
+    btn.style.gridArea = areas[index];
 
     btn.onclick = () => selectCloudOption(text, btn);
 
