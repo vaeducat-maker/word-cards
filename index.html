@@ -495,7 +495,41 @@ button{
     gap:12px;
   "></div>
 </div>
- <div id="cloudChoiceView" class="hidden">
+ <div id="choiceView" class="hidden">
+  <div style="
+    max-width:420px;
+    margin:18px auto;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 10px 24px rgba(0,0,0,0.12);
+    background:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:300px;
+  ">
+    <div id="choiceTop" style="
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-bottom:20px;
+    "></div>
+
+    <div id="choicePrompt" style="
+      font-size:32px;
+      font-weight:800;
+      text-align:center;
+      margin:20px 0;
+    "></div>
+
+    <div id="choiceBottom" style="
+      display:flex;
+      justify-content:center;
+      gap:10px;
+    "></div>
+  </div>
+</div>
+  <div id="cloudChoiceView" class="hidden">
   <div id="cloudCard" class="cloud-card">
     <div class="cloud-task">Выбери перевод</div>
     <div id="cloudCenter" class="cloud-center">laud</div>
