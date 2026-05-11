@@ -1359,7 +1359,132 @@ function startMatchGame(words, stage){
     }, 700);
   }
 }
-function startBuildGame(words, stage){
+function startCloudChoiceGame(words, stage){
+  cloudWords = [...words];
+  cloudStage = stage;
+  currentView = "cloud-choice";
+  showSection("choice");
+  showNextCloudChoice();
+}
+
+function showNextCloudChoice(){
+  cloudMistakes = 0;
+
+  if(!cloudWords.length){
+    finishCloudChoiceStep();
+    return;
+  }
+
+  cloudCurrent = cloudWords.shift();
+
+  ui.cloudAnswer.classList.add("hidden");
+  ui.cloudCenter.innerText = cloudCurrent.translation;
+  ui.cloudOptions.innerHTML = "";
+
+  const allWords = cardsOriginal.length ? cardsOriginal : getAllCardsForMode();
+
+  let wrongOptions = allWords
+    .filter(w => w.id !== cloudCurrent.id && w.word)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 7)
+    .map(w => w.word);
+
+  const options = shuffleArray([
+    cloudCurrent.word,
+    ...wrongOptions
+  ]).slice(0, 8);
+
+  renderCloudOptions(options);
+}
+
+function renderCloudOptions(options){
+  const positions = [
+    { left:"38%", top:"58px" },
+    { left:"8%", top:"112px" },
+    { right:"8%", top:"112px" },
+    { left:"5%", top:"230px" },
+    { right:"5%", top:"230px" },
+    { left:"18%", bottom:"56px" },
+    { right:"18%", bottom:"56px" },
+    { left:"38%", bottom:"14px" }
+  ];
+
+  options.forEach((text, index) => {
+    const btn = document.createElement("button");
+    btn.className = "cloud-option";
+    btn.innerText = text;
+
+    const pos = positions[index];
+    Object.keys(pos).forEach(key => {
+      btn.style[key] = pos[key];
+    });
+
+    btn.onclick = () => selectCloudOption(text, btn);
+
+    ui.cloudOptions.appendChild(btn);
+  });
+}
+
+function selectCloudOption(selected, btn){
+  const correct = cloudCurrent.word;
+
+  if(selected === correct){
+    btn.classList.add("correct");
+
+    setTimeout(() => {
+      showNextCloudChoice();
+    }, 500);
+
+    return;
+  }
+
+  cloudMistakes += 1;
+  btn.classList.add("wrong");
+
+  [...ui.cloudOptions.children].forEach(b => {
+    if(b.innerText === correct){
+      b.classList.add("correct");
+    }
+  });
+
+  if(cloudMistakes >= 3){
+    showCloudCorrectAnswer();
+    return;
+  }
+
+  setTimeout(() => {
+    btn.classList.remove("wrong");
+  }, 450);
+}
+
+function showCloudCorrectAnswer(){
+  ui.cloudAnswerEt.innerText = cloudCurrent.translation;
+  ui.cloudAnswerRu.innerText = cloudCurrent.word;
+  ui.cloudAnswer.classList.remove("hidden");
+
+  setTimeout(() => {
+    showNextCloudChoice();
+  }, 2600);
+}
+
+function finishCloudChoiceStep(){
+  if(cloudStage === "after-writing-1"){
+    currentView = "learn-writing-2";
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(8,16), 8, false);
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+    setStatus("Writing 2");
+    showSection("writing");
+    renderWriting();
+    saveResume();
+    return;
+  }
+
+  finishFlowStep();
+}
+  function startBuildGame(words, stage){
   buildWords = words;
   buildIndex = 0;
   matchStage = stage; // ВОТ ЭТО ВАЖНО
