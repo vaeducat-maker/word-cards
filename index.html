@@ -1506,6 +1506,73 @@ function showCloudCorrectAnswer(){
   }, 2600);
 }
 
+  function createMixedTasks(words){
+
+  mixedTasks = [];
+
+  words.forEach(word => {
+
+    mixedTasks.push({
+      type: "write",
+      word
+    });
+
+    mixedTasks.push({
+      type: "cloud",
+      word
+    });
+
+  });
+
+  mixedTasks = shuffleArray(mixedTasks);
+  mixedIndex = 0;
+}
+
+function runNextMixedTask(){
+
+  if(mixedIndex >= mixedTasks.length){
+    finishFlowStep();
+    return;
+  }
+
+  const task = mixedTasks[mixedIndex];
+  mixedIndex++;
+
+  if(task.type === "write"){
+
+    currentView = "mixed-writing";
+
+    writingDeck = [{
+      id: task.word.id,
+      prompt: task.word.ru,
+      answer: getPrimaryForm(task.word.translation),
+      fullRow: task.word.translation,
+      stage: getWritingStage(task.word.id)
+    }];
+
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+
+    setStatus("Write");
+
+    showSection("writing");
+    renderWriting();
+
+    return;
+  }
+
+  if(task.type === "cloud"){
+
+    setStatus("Choose");
+
+    startCloudChoiceGame([task.word], "mixed");
+
+    return;
+  }
+}
+
 function finishCloudChoiceStep(){
   if(cloudStage === "after-writing-1"){
     currentView = "learn-writing-2";
