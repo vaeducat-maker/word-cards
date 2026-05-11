@@ -1537,7 +1537,17 @@ function showCloudCorrectAnswer(){
 function runNextMixedTask(){
 
   if(mixedIndex >= mixedTasks.length){
-    finishFlowStep();
+    currentView = "learn-writing-2";
+    writingDeck = buildWritingDeckFromWords(cardsOriginal.slice(8,16), 8, false);
+    writingIndex = 0;
+    writingMistakes = 0;
+    writingHelpMode = false;
+    writingSuccessTarget = "left";
+
+    setStatus("Writing 2");
+    showSection("writing");
+    renderWriting();
+    saveResume();
     return;
   }
 
@@ -1572,13 +1582,10 @@ function runNextMixedTask(){
   if(task.type === "cloud"){
 
     setStatus("Choose");
-
     startCloudChoiceGame([task.word], "mixed");
-
     return;
   }
 }
-
 function finishCloudChoiceStep(){
 
   if(cloudStage === "mixed"){
