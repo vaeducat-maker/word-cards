@@ -365,23 +365,44 @@ button{
 }
 .cloud-card{
   max-width:420px;
-  height:420px;
+  height:470px;
   margin:18px auto;
   position:relative;
   border-radius:24px;
   background:#f8fbff;
   box-shadow:0 10px 24px rgba(0,0,0,0.12);
   overflow:hidden;
+  padding:12px;
+  box-sizing:border-box;
 }
 
 .cloud-task{
   position:absolute;
-  top:14px;
+  top:12px;
   left:0;
   right:0;
   font-size:14px;
   font-weight:700;
   color:#94a3b8;
+  z-index:3;
+}
+
+#cloudOptions{
+  position:absolute;
+  left:12px;
+  right:12px;
+  top:48px;
+  bottom:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:1fr 1fr 1fr;
+  grid-template-areas:
+    "a b c"
+    "d center e"
+    "f g h";
+  gap:12px;
+  align-items:center;
+  justify-items:center;
 }
 
 .cloud-center{
@@ -389,26 +410,33 @@ button{
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
-  padding:16px 22px;
+  padding:14px 18px;
   border-radius:20px;
   background:#dbeafe;
   color:#2563eb;
-  font-size:38px;
+  font-size:34px;
   font-weight:900;
   box-shadow:0 6px 16px rgba(37,99,235,0.18);
   z-index:2;
+  max-width:130px;
+  word-break:break-word;
 }
 
 .cloud-option{
-  position:absolute;
-  min-width:92px;
-  padding:11px 14px;
+  position:static;
+  width:100%;
+  max-width:110px;
+  min-height:54px;
+  padding:8px 10px;
   border-radius:16px;
   background:white;
   color:#1f2937;
-  font-size:17px;
+  font-size:15px;
   font-weight:800;
+  line-height:1.15;
   box-shadow:0 5px 12px rgba(0,0,0,0.12);
+  white-space:normal;
+  word-break:break-word;
 }
 
 .cloud-option.correct{
@@ -444,7 +472,7 @@ button{
   font-weight:900;
   color:#b91c1c;
 }
- </style>
+} </style>
 </head>
 <body>
 
