@@ -1768,11 +1768,16 @@ if(matchPairsLeft === 0){
   renderMatch();
 
       setTimeout(() => {
-        c1._state = "";
-        c2._state = "";
-        matchSelected = [];
-        renderMatch();
-      }, 600);
+  c1._state = "";
+  c2._state = "";
+
+  if(correctEtCard){
+    correctEtCard._state = "";
+  }
+
+  matchSelected = [];
+  renderMatch();
+}, 900);
     }
   }
 }
