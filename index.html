@@ -1727,9 +1727,13 @@ function finishCloudChoiceStep(){
       c1.type !== c2.type;
 
     if(isCorrect){
-      c1._state = "correct";
-      c2._state = "correct";
-      renderMatch();
+  c1._state = "correct";
+  c2._state = "correct";
+
+  const correctEt = c1.type === "et" ? c1.text : c2.text;
+  speakWord(correctEt);
+
+  renderMatch();
 
       setTimeout(() => {
         c1._removed = true;
