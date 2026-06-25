@@ -2814,7 +2814,8 @@ ui.card.addEventListener("touchend", e => {
 
   if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
 
-  if(!cardCanSwipe) return;
+ 
+if(!cardCanSwipe) return;
 
 if(dx < 0){
   // ничего не делаем
