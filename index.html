@@ -2315,20 +2315,23 @@ function toggleSound(){
   updateSoundButton();
 }
   
-  function speakCurrentWord(){
-
+  function speakWord(text){
   if(!soundEnabled) return;
-  if(!cardsWords.length) return;
-    
-  const text = cardsWords[cardsIndex].translation;
+  if(!text) return;
 
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = "et-EE";
+  u.lang = modeMap[currentMode].speakLang || "et-EE";
 
   speechSynthesis.cancel();
   speechSynthesis.speak(u);
 }
 
+function speakCurrentWord(){
+  if(!cardsWords.length) return;
+
+  const text = cardsWords[cardsIndex].translation;
+  speakWord(text);
+}
 /* ================= WRITING HELPERS ================= */
 
 function getAlphabetForCurrentMode(){
