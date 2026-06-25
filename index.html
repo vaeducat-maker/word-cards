@@ -2788,7 +2788,8 @@ function initApp(){
   ui.modeSelect.value = currentMode;
   saveLastMode();
   applyColor();
-
+  updateSoundButton();
+  
   const resume = loadResume();
 
   if(resume && resume.currentMode === currentMode){
