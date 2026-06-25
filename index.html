@@ -2287,6 +2287,19 @@ function speakAnswer(){
   speechSynthesis.speak(u);
 }
 
+  function speakCurrentWord(){
+
+  if(!cardsWords.length) return;
+
+  const text = cardsWords[cardsIndex].translation;
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "et-EE";
+
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
 /* ================= WRITING HELPERS ================= */
 
 function getAlphabetForCurrentMode(){
