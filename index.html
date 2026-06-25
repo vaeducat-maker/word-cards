@@ -1654,6 +1654,8 @@ function finishCloudChoiceStep(){
     }, 250);
 
     if(buildCurrent.length === buildCorrectParts.length){
+      speakWord(buildCurrent.join(""));
+      
       setTimeout(() => {
         buildIndex += 1;
 
