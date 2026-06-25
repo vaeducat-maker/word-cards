@@ -2316,8 +2316,9 @@ function toggleSound(){
   
   function speakCurrentWord(){
 
+  if(!soundEnabled) return;
   if(!cardsWords.length) return;
-
+    
   const text = cardsWords[cardsIndex].translation;
 
   const u = new SpeechSynthesisUtterance(text);
