@@ -1752,9 +1752,20 @@ if(matchPairsLeft === 0){
       }, 500);
 
     }else{
-      c1._state = "wrong";
-      c2._state = "wrong";
-      renderMatch();
+  c1._state = "wrong";
+  c2._state = "wrong";
+
+  const targetRu = c1.type === "ru" ? c1 : (c2.type === "ru" ? c2 : null);
+  const correctEtCard = targetRu
+    ? matchCards.find(card => card.id === targetRu.id && card.type === "et")
+    : null;
+
+  if(correctEtCard){
+    correctEtCard._state = "correct";
+    speakWord(correctEtCard.text);
+  }
+
+  renderMatch();
 
       setTimeout(() => {
         c1._state = "";
