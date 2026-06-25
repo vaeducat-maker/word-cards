@@ -2298,6 +2298,22 @@ function speakAnswer(){
   speechSynthesis.speak(u);
 }
 
+  function updateSoundButton(){
+  if(!ui.soundBtn) return;
+  ui.soundBtn.innerText = soundEnabled ? "🔊 Sound" : "🔇 Sound";
+}
+
+function toggleSound(){
+  soundEnabled = !soundEnabled;
+  localStorage.setItem("soundEnabled_v1", soundEnabled ? "true" : "false");
+
+  if(!soundEnabled){
+    speechSynthesis.cancel();
+  }
+
+  updateSoundButton();
+}
+  
   function speakCurrentWord(){
 
   if(!cardsWords.length) return;
