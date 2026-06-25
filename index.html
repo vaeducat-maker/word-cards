@@ -2149,9 +2149,18 @@ if(cardsPendingShow){
 }
 
 // показать эстонское слово через 600 мс
+cardCanSwipe = false;
+
 cardsPendingShow = setTimeout(() => {
   ui.translation.innerText = w.translation;
   ui.translation.classList.add("show");
+
+  speakCurrentWord();
+
+  setTimeout(() => {
+    cardCanSwipe = true;
+  }, 1200);
+
   cardsPendingShow = null;
 }, 600);
 }
